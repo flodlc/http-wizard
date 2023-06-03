@@ -1,0 +1,29 @@
+{
+  "name": "json-schema-client",
+  "repository": "https://github.com/flodlc/json-schema-client.git",
+  "author": "flodlc <f.delacomble@gmail.com>",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "module": "./dist/index.mjs",
+  "packageManager": "yarn@3.2.1",
+  "version": "1.0.5",
+  "scripts": {
+    "dev": "tsup src/index.ts --watch",
+    "build": "tsup src/index.ts --dts",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@sinclair/typebox": "^0.28.14",
+    "axios": "^1.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.7.16",
+    "tsup": "^6.2.3",
+    "typescript": "^5.0.4"
+  },
+  "files": [
+    "dist/*"
+  ],
+  "keywords": []
+}

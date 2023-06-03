@@ -1,0 +1,12 @@
+import { defineConfig } from 'tsup';
+
+export default defineConfig({
+  target: 'es2015',
+  platform: 'node',
+  format: ['cjs', 'esm'],
+  splitting: false,
+  shims: false,
+  minify: false,
+  sourcemap: true,
+  clean: true,
+});
