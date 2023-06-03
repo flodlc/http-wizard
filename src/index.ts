@@ -1,1 +1,1 @@
-export { loadDefinitions } from './clientFactory';
+export { loadRouteDefinitions } from './clientFactory';

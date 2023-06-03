@@ -98,7 +98,7 @@ export const createClientMethod =
     };
   };
 
-export const loadDefinitions = <
+export const loadRouteDefinitions = <
   D extends Record<
     string,
     {
@@ -108,25 +108,25 @@ export const loadDefinitions = <
     }
   >
 >(
-  defs: D
+  definitions: D
 ) => {
   return [
     (instance: AxiosInstance) => {
-      const schema = defs['getFiltersForCadran'].schema;
+      const schema = definitions['getFiltersForCadran'].schema;
       return {
         getFiltersForCadran: createClientMethod<typeof schema>({
-          ...defs['getFiltersForCadran'],
+          ...definitions['getFiltersForCadran'],
           instance,
         }),
       };
     },
-    defs['getFiltersForCadran'].schema,
-  ] as unknown as [
-    (instance: any) => {
-      [K in keyof typeof defs]: (
+    definitions['getFiltersForCadran'].schema,
+  ] as unknown as {
+    createClient: (instance: any) => {
+      [K in keyof typeof definitions]: (
         args: Args<D[K]['schema']>
       ) => Promise<Response<D[K]['schema']>>;
-    },
-    { [K in keyof D]: D[K]['schema'] }
-  ];
+    };
+    schema: { [K in keyof D]: D[K]['schema'] };
+  };
 };

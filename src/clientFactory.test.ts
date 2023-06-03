@@ -1,28 +1,30 @@
 import { Type } from '@sinclair/typebox';
-import { loadDefinitions } from './clientFactory';
+import { loadRouteDefinitions } from './clientFactory';
+
 const definitions = {
-  getFormations: {
+  getUsers: {
     method: 'GET',
-    url: '/panorama/filters',
+    url: '/users',
     schema: {
       querystring: Type.Object({
         offset: Type.Optional(Type.Number()),
         limit: Type.Optional(Type.Number()),
       }),
       response: {
-        200: Type.Object({
-          count: Type.Number(),
-          formations: Type.String(),
-        }),
+        200: Type.Array(
+          Type.Object({
+            name: Type.String(),
+            age: Type.Number(),
+          })
+        ),
       },
     },
   },
 } as const;
 
-const [createClient, schema] = loadDefinitions(definitions);
+const { createClient, schema } = loadRouteDefinitions(definitions);
 const client = createClient({} as any);
 
 async () => {
-  const aa = await client.getFormations({ query: { limit: 1 } });
+  const users = await client.getUsers({ query: { limit: 1 } });
 };
-const sc = schema.getFormations;

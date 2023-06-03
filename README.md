@@ -1,11 +1,11 @@
-<h1 align="center">Injecti</h1>
-<p align="center"><a href="https://git.io/typing-svg"><img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=18&duration=2000&pause=2000&center=true&width=540&height=80&lines=First+class+dependency+injection+for+Typescript." alt="Typing SVG" /></a></p>
+<h1 align="center">typed-client</h1>
+<p align="center"><a href="https://git.io/typing-svg"><img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=18&duration=2000&pause=2000&center=true&width=540&height=80&lines=First+class+client+for+fastify." alt="Typing SVG" /></a></p>
 
-### Injecti is a simple dependency injection tool for typescript with the following features:
+### typed-client is a simple client for Typebox schema based api using:
 
-- First class dependency injection without container
 - Fully written in TypeScript
-- Clean code compatible
+- Typebox for easy json-schema writting
+- axios (more http client supported soon) as a http client
 
 ---
 
@@ -18,42 +18,55 @@ Table of Contents:
 
 ## Installation
 
-To get started, install injecti using npm or yarn:
+To get started, install typed-client using npm or yarn:
 
 ```sh
-npm install injecti
+npm install typed-client
 # or
-yarn add injecti
+yarn add typed-client
 ```
 
 ## Usage
 
 ```typescript
-import { inject } from 'injecti';
+import { loadDefinitions } from 'typed-client';
 
-const insertUserInDB = (name: string) => {
-  return db.insert('user', { name });
+const definitions = {
+  getUsers: {
+    method: 'GET',
+    url: '/users',
+    schema: {
+      querystring: Type.Object({
+        offset: Type.Optional(Type.Number()),
+        limit: Type.Optional(Type.Number()),
+      }),
+      response: {
+        200: Type.Array(
+          Type.Object({
+            name: Type.String(),
+            age: Type.Number(),
+          })
+        ),
+      },
+    },
+  },
+} as const;
+
+const { createClient, schema } = loadRouteDefinitions(definitions);
+
+// fastify
+server.get('/', { schema: schema.getUsers }, async (request, response) => {
+  response.status(200).send([{ name: 'John', age: 30 }]);
+});
+
+// client
+const apiClient = createClient(axios.create({ baseURL: 'localhost' }));
+
+async () => {
+  const users = await apiClient.getUsers({ query: { limit: 1 } });
 };
-
-const [createUser, createUserFactory] = inject(
-  { insertUserInDB },
-  (deps) => (name: string) => {
-    return deps.insertUserInDB(name);
-  }
-);
-
-// usage
-await createUser('John');
-
-// test
-const fakeInsertUserInDB = () => {};
-const createUser = createUserFactory({ insertUserInDB: fakeInsertUserInDB });
-const result = createUser('John');
-
-// assert fakeInsertUserInDB called once
-// assert result is {name: 'John'}
 ```
 
 ---
 
-That's it! You can now use injecti to create unit testable functions.
+That's it! You can now use TypedClient to create fully typed and safe api client.
