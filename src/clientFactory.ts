@@ -98,6 +98,8 @@ export const createClientMethod =
     };
   };
 
+type Simplify<T> = { [K in keyof T]: T[K] } & {};
+
 export const loadRouteDefinitions = <
   D extends Record<
     string,
@@ -113,19 +115,18 @@ export const loadRouteDefinitions = <
   return [
     (instance: AxiosInstance) => {
       const schema = definitions['getFiltersForCadran'].schema;
-      return {
-        getFiltersForCadran: createClientMethod<typeof schema>({
-          ...definitions['getFiltersForCadran'],
-          instance,
-        }),
-      };
+      return Object.fromEntries(
+        Object.entries(definitions).map(([key, def]) => {
+          return [key, createClientMethod<typeof schema>({ ...def, instance })];
+        })
+      );
     },
     definitions['getFiltersForCadran'].schema,
   ] as unknown as {
     createClient: (instance: any) => {
       [K in keyof typeof definitions]: (
-        args: Args<D[K]['schema']>
-      ) => Promise<Response<D[K]['schema']>>;
+        args: Simplify<Args<D[K]['schema']>>
+      ) => Promise<Simplify<Response<D[K]['schema']>>>;
     };
     schema: { [K in keyof D]: D[K]['schema'] };
   };

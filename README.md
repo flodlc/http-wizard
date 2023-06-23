@@ -21,15 +21,15 @@ Table of Contents:
 To get started, install typed-client using npm or yarn:
 
 ```sh
-npm install typed-client
+npm install typeclient
 # or
-yarn add typed-client
+yarn add typeclient
 ```
 
 ## Usage
 
 ```typescript
-import { loadDefinitions } from 'typed-client';
+import { loadDefinitions } from 'typeclient';
 
 const definitions = {
   getUsers: {
