@@ -1,6 +1,6 @@
 {
   "name": "@flodlc/tsclient",
-  "repository": "https://github.com/flodlc/json-schema-client.git",
+  "repository": "https://github.com/flodlc/tsclient.git",
   "author": "flodlc <f.delacomble@gmail.com>",
   "license": "MIT",
   "main": "./dist/index.js",
