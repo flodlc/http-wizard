@@ -1,7 +1,7 @@
-<h1 align="center">tsclient</h1>
+<h1 align="center">typebox-client</h1>
 <p align="center"><a href="https://git.io/typing-svg"><img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=18&duration=2000&pause=2000&center=true&width=540&height=80&lines=First+class+api+client+for+fastify." alt="Typing SVG" /></a></p>
 
-### tsclient is a simple client for Typebox schema based api using:
+### typebox-client is a simple client for Typebox schema based api using:
 
 - Fully written in TypeScript
 - Typebox for easy json-schema writting
@@ -18,18 +18,18 @@ Table of Contents:
 
 ## Installation
 
-To get started, install tsclient using npm or yarn:
+To get started, install typebox-client using npm or yarn:
 
 ```sh
-npm install tsclient
+npm install typebox-client
 # or
-yarn add tsclient
+yarn add typebox-client
 ```
 
 ## Usage
 
 ```typescript
-import { loadDefinitions } from 'tsclient';
+import { loadDefinitions } from 'typebox-client';
 
 const definitions = {
   getUsers: {
@@ -69,4 +69,4 @@ async () => {
 
 ---
 
-That's it! You can now use Tsclient to create fully typed and safe api client.
+That's it! You can now use typebox-client to create fully typed and safe api client.

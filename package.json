@@ -1,6 +1,6 @@
 {
-  "name": "tsclient",
-  "repository": "https://github.com/flodlc/tsclient.git",
+  "name": "typebox-client",
+  "repository": "https://github.com/flodlc/typebox-client.git",
   "author": "flodlc <f.delacomble@gmail.com>",
   "license": "MIT",
   "main": "./dist/index.js",
