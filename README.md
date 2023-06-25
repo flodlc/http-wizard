@@ -55,7 +55,7 @@ const definitions = {
 const { createClient, schema } = loadRouteDefinitions(definitions);
 
 // fastify
-server.get('/', { schema: schema.getUsers }, async (request, response) => {
+server.get('/users', { schema: schema.getUsers }, async (request, response) => {
   response.status(200).send([{ name: 'John', age: 30 }]);
 });
 
