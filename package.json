@@ -1,5 +1,5 @@
 {
-  "name": "@flodlc/fastifyclient",
+  "name": "@flodlc/tsclient",
   "repository": "https://github.com/flodlc/json-schema-client.git",
   "author": "flodlc <f.delacomble@gmail.com>",
   "license": "MIT",
