@@ -1,5 +1,5 @@
 {
-  "name": "@flodlc/tsclient",
+  "name": "tsclient",
   "repository": "https://github.com/flodlc/tsclient.git",
   "author": "flodlc <f.delacomble@gmail.com>",
   "license": "MIT",
