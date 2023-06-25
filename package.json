@@ -25,5 +25,13 @@
   "files": [
     "dist/*"
   ],
-  "keywords": []
+  "keywords": [
+    "typebox",
+    "fastify",
+    "typescript",
+    "client",
+    "api",
+    "node",
+    "js"
+  ]
 }
