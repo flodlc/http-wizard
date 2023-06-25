@@ -31,8 +31,9 @@ export type BodyFromSchema<S> = S extends {
 
 export type Body<S extends Schema> = BodyFromSchema<S>;
 
-export type Args<S extends Schema> = Record<string, unknown> &
-  (Body<S> extends undefined ? { body?: undefined } : { body: Body<S> }) &
+export type Args<S extends Schema> = (Body<S> extends undefined
+  ? { body?: undefined }
+  : { body: Body<S> }) &
   (Query<S> extends undefined ? { query?: undefined } : { query: Query<S> }) &
   (Params<S> extends undefined
     ? { params?: undefined }
