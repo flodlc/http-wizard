@@ -29,7 +29,7 @@ yarn add typebox-client
 ## Usage
 
 ```typescript
-import { loadDefinitions } from 'typebox-client';
+import { loadRouteDefinitions } from 'typebox-client';
 
 const definitions = {
   getUsers: {
