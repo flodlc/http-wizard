@@ -1,11 +1,12 @@
 import { Type } from '@sinclair/typebox';
-import { loadRouteDefinitions } from './clientFactory';
+import { Definitions, loadRouteDefinitions } from './clientFactory';
 
-const definitions = {
+const { createClient, schema } = loadRouteDefinitions({
   getUsers: {
     method: 'GET',
-    url: () => '/users',
+    url: (ddsf) => '/users',
     schema: {
+      params: Type.Object({ toto: Type.String() }),
       querystring: Type.Object({
         offset: Type.Optional(Type.Number()),
         limit: Type.Optional(Type.Number()),
@@ -20,11 +21,13 @@ const definitions = {
       },
     },
   },
-} as const;
+} as const);
 
-const { createClient, schema } = loadRouteDefinitions(definitions);
 const client = createClient({} as any);
 
 async () => {
-  const users = await client.getUsers({ query: { limit: 1 } });
+  const users = await client.getUsers({
+    query: { limit: 1 },
+    params: { toto: 'a' },
+  });
 };

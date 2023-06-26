@@ -1,4 +1,4 @@
-import { Static, TSchema } from '@sinclair/typebox';
+import { Static, TObject, TSchema, Type } from '@sinclair/typebox';
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
 
 type Schema = {
@@ -107,16 +107,12 @@ type Simplify<T> = { [K in keyof T]: T[K] } & {};
 
 export const loadRouteDefinitions = <
   D extends {
-    [k: string]: {
+    [K in keyof D]: {
       method: AxiosRequestConfig['method'];
       url:
         | string
-        | (({
-            params,
-          }: {
-            params: Args<D[typeof k]['schema']>['params'];
-          }) => string);
-      schema: any;
+        | (({ params }: { params: { [s: string]: string } }) => string);
+      schema: Schema;
     };
   }
 >(
@@ -126,13 +122,13 @@ export const loadRouteDefinitions = <
     (instance: AxiosInstance) => {
       return Object.fromEntries(
         Object.entries(definitions).map(([key, def]) => {
-          return [key, createClientMethod({ ...def, instance })];
+          return [key, createClientMethod({ ...(def as any), instance })];
         })
       );
     },
     Object.fromEntries(
       Object.entries(definitions).map(([key, def]) => {
-        const schema = def.schema;
+        const schema = (def as any).schema;
         return [key, schema];
       })
     ),
@@ -145,3 +141,25 @@ export const loadRouteDefinitions = <
     schema: { [K in keyof D]: D[K]['schema'] };
   };
 };
+
+loadRouteDefinitions({
+  getUsers: {
+    method: 'GET',
+    url: (pp) => '/users',
+    schema: {
+      params: Type.Object({ toto: Type.String() }),
+      querystring: Type.Object({
+        offset: Type.Optional(Type.Number()),
+        limit: Type.Optional(Type.Number()),
+      }),
+      response: {
+        200: Type.Array(
+          Type.Object({
+            name: Type.String(),
+            age: Type.Number(),
+          })
+        ),
+      },
+    },
+  },
+} as const);
