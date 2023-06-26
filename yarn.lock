@@ -1819,18 +1819,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tsclient@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "tsclient@workspace:."
-  dependencies:
-    "@sinclair/typebox": ^0.28.14
-    "@types/node": ^18.7.16
-    axios: ^1.4.0
-    tsup: ^6.2.3
-    typescript: ^5.0.4
-  languageName: unknown
-  linkType: soft
-
 "tsup@npm:^6.2.3":
   version: 6.7.0
   resolution: "tsup@npm:6.7.0"
@@ -1866,6 +1854,18 @@ __metadata:
   checksum: 91ff179f0b9828a6880b6decaa8603fd7af0311f46a38d3a93647a2497298750d676810aeff533a335443a01a7b340dbba7c76523bcd7a87d7b05b7677742901
   languageName: node
   linkType: hard
+
+"typebox-client@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "typebox-client@workspace:."
+  dependencies:
+    "@sinclair/typebox": ^0.28.14
+    "@types/node": ^18.7.16
+    axios: ^1.4.0
+    tsup: ^6.2.3
+    typescript: ^5.0.4
+  languageName: unknown
+  linkType: soft
 
 "typescript@npm:^5.0.4":
   version: 5.1.3
