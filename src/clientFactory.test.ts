@@ -4,7 +4,7 @@ import { loadRouteDefinitions } from './clientFactory';
 const definitions = {
   getUsers: {
     method: 'GET',
-    url: '/users',
+    url: () => '/users',
     schema: {
       querystring: Type.Object({
         offset: Type.Optional(Type.Number()),

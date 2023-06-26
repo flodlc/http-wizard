@@ -76,22 +76,26 @@ export const createClientMethod =
     instance,
   }: {
     method: AxiosRequestConfig['method'];
-    url: string;
+    url: string | (({ params }: { params: Args<S>['params'] }) => string);
     instance: AxiosInstance;
   }) =>
   (args: Args<S>, config?: AxiosRequestConfig) => {
+    const processedUrl =
+      typeof url === 'string'
+        ? url
+        : url({ params: args.params as Args<S>['params'] });
     return {
       call: () =>
         callApi<S>({
           method,
-          url,
+          url: processedUrl,
           config,
           instance,
           ...args,
         }),
       url: instance.getUri({
         method,
-        url,
+        url: processedUrl,
         params: args.query,
         data: args.body,
         ...config,
@@ -102,27 +106,36 @@ export const createClientMethod =
 type Simplify<T> = { [K in keyof T]: T[K] } & {};
 
 export const loadRouteDefinitions = <
-  D extends Record<
-    string,
-    {
+  D extends {
+    [k: string]: {
       method: AxiosRequestConfig['method'];
-      url: string;
+      url:
+        | string
+        | (({
+            params,
+          }: {
+            params: Args<D[typeof k]['schema']>['params'];
+          }) => string);
       schema: any;
-    }
-  >
+    };
+  }
 >(
   definitions: D
 ) => {
   return [
     (instance: AxiosInstance) => {
-      const schema = definitions['getFiltersForCadran'].schema;
       return Object.fromEntries(
         Object.entries(definitions).map(([key, def]) => {
-          return [key, createClientMethod<typeof schema>({ ...def, instance })];
+          return [key, createClientMethod({ ...def, instance })];
         })
       );
     },
-    definitions['getFiltersForCadran'].schema,
+    Object.fromEntries(
+      Object.entries(definitions).map(([key, def]) => {
+        const schema = def.schema;
+        return [key, schema];
+      })
+    ),
   ] as unknown as {
     createClient: (instance: any) => {
       [K in keyof typeof definitions]: (
