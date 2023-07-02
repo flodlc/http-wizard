@@ -1,4 +1,4 @@
-import { Static, TObject, TSchema, Type } from '@sinclair/typebox';
+import { Static, TSchema } from '@sinclair/typebox';
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
 
 type Schema = {
@@ -8,36 +8,33 @@ type Schema = {
   response: Record<number, TSchema>;
 };
 
-export type ParamsFromSchema<S> = S extends {
+export type ParamsFromSchema<S extends Schema> = S extends {
   params: TSchema;
 }
   ? Static<S['params']>
   : undefined;
 
-export type Params<S extends Schema> = ParamsFromSchema<S>;
-
-export type QueryFromSchema<S> = S extends {
+export type QueryFromSchema<S extends Schema> = S extends {
   querystring: TSchema;
 }
   ? Static<S['querystring']>
   : undefined;
-export type Query<S extends Schema> = QueryFromSchema<S>;
 
-export type BodyFromSchema<S> = S extends {
+export type BodyFromSchema<S extends Schema> = S extends {
   body: TSchema;
 }
   ? Static<S['body']>
   : undefined;
 
-export type Body<S extends Schema> = BodyFromSchema<S>;
-
-export type Args<S extends Schema> = (Body<S> extends undefined
+export type Args<S extends Schema> = (BodyFromSchema<S> extends undefined
   ? { body?: undefined }
-  : { body: Body<S> }) &
-  (Query<S> extends undefined ? { query?: undefined } : { query: Query<S> }) &
-  (Params<S> extends undefined
+  : { body: BodyFromSchema<S> }) &
+  (QueryFromSchema<S> extends undefined
+    ? { query?: undefined }
+    : { query: QueryFromSchema<S> }) &
+  (ParamsFromSchema<S> extends undefined
     ? { params?: undefined }
-    : { params: Params<S> });
+    : { params: ParamsFromSchema<S> });
 
 export type ResponseFromSchema<S> = S extends {
   response: { 200: TSchema };
@@ -82,7 +79,10 @@ export const createClientMethod =
   (args: Args<S>, config?: AxiosRequestConfig) => {
     const processedUrl =
       typeof url === 'string'
-        ? url
+        ? Object.entries(args.params ?? {}).reduce((acc, [key, value]) => {
+            const sdf = new RegExp(`:${key}`, 'g');
+            return acc.replace(sdf, value as string);
+          }, url)
         : url({ params: args.params as Args<S>['params'] });
     return {
       call: () =>
@@ -99,11 +99,22 @@ export const createClientMethod =
         params: args.query,
         data: args.body,
         ...config,
+        ...args,
       }),
     };
   };
 
 type Simplify<T> = { [K in keyof T]: T[K] } & {};
+
+export const createRouteDefinition = <
+  R extends {
+    method: AxiosRequestConfig['method'];
+    url: string | (({ params }: { params: { [s: string]: string } }) => string);
+    schema: Schema;
+  }
+>(
+  routeDefinition: R
+) => routeDefinition;
 
 export const loadRouteDefinitions = <
   D extends {
@@ -132,34 +143,15 @@ export const loadRouteDefinitions = <
         return [key, schema];
       })
     ),
-  ] as unknown as {
-    createClient: (instance: any) => {
+  ] as unknown as [
+    (instance: any) => {
       [K in keyof typeof definitions]: (
         args: Simplify<Args<D[K]['schema']>>
-      ) => Promise<Simplify<Response<D[K]['schema']>>>;
-    };
-    schema: { [K in keyof D]: D[K]['schema'] };
-  };
-};
-
-loadRouteDefinitions({
-  getUsers: {
-    method: 'GET',
-    url: (pp) => '/users',
-    schema: {
-      params: Type.Object({ toto: Type.String() }),
-      querystring: Type.Object({
-        offset: Type.Optional(Type.Number()),
-        limit: Type.Optional(Type.Number()),
-      }),
-      response: {
-        200: Type.Array(
-          Type.Object({
-            name: Type.String(),
-            age: Type.Number(),
-          })
-        ),
-      },
+      ) => {
+        call: () => Promise<Simplify<Response<D[K]['schema']>>>;
+        url: string;
+      };
     },
-  },
-} as const);
+    { [K in keyof D]: D[K]['schema'] }
+  ];
+};
