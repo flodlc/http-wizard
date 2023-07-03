@@ -31,7 +31,7 @@ yarn add typebox-client
 ### Route definitions and api calls
 
 ```typescript
-import { loadRouteDefinitions } from 'typebox-client';
+import { loadRouteDefinitions, createRouteDefinition } from 'typebox-client';
 
 const definitions = {
   getUser: createRouteDefinition({
