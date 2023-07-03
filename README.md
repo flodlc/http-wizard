@@ -79,7 +79,7 @@ typebox-client use the `/my-url/:my-param` syntax to inject given parameters in 
 Sometime, instead of calling the client method you will want to get the computed url. It's usefull to use it as a link href for instance.
 
 ```typescript
-const uri = await client.getUser({ params: { id: 'my-user-id' } }).call();
+const url = await client.getUser({ params: { id: 'my-user-id' } }).url;
 // https://localhost/user/my-user-id
 ```
 
