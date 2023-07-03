@@ -52,7 +52,7 @@ const definitions = {
       },
     },
   }),
-} as const;
+};
 
 const [createClient, schemas] = loadRouteDefinitions(definitions);
 
