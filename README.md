@@ -34,7 +34,7 @@ yarn add typebox-client
 import { loadRouteDefinitions } from 'typebox-client';
 
 const definitions = {
-  getUsers: {
+  getUser: createRouteDefinition({
     method: 'GET',
     // Id parameter is dynamicaly injected in the final url.
     url: `/user/:id`,
@@ -51,13 +51,13 @@ const definitions = {
         ),
       },
     },
-  },
+  }),
 } as const;
 
-const [createClient, schema] = loadRouteDefinitions(definitions);
+const [createClient, schemas] = loadRouteDefinitions(definitions);
 
 // fastify
-server.get('/users', { schema: schema.getUsers }, async (request, response) => {
+server.get('/user', { schema: schemas.getUser }, async (request, response) => {
   response.status(200).send([{ name: 'John', age: 30 }]);
 });
 
@@ -72,7 +72,7 @@ async () => {
 
 ### Inject URL params
 
-typebox-client use the `my-url/:my-param` syntax to inject given parameters in the final url.
+typebox-client use the `/my-url/:my-param` syntax to inject given parameters in the final url.
 
 ### Access the final URL
 
