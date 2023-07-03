@@ -6,7 +6,9 @@ const routeDefinitions = {
     method: 'GET',
     url: `/user/:id`,
     schema: {
-      params: Type.Object({ id: Type.String() }),
+      params: Type.Object({
+        id: Type.String(),
+      }),
       response: {
         200: Type.Array(
           Type.Object({

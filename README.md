@@ -28,17 +28,19 @@ yarn add typebox-client
 
 ## Usage
 
+### Route definitions and api calls
+
 ```typescript
 import { loadRouteDefinitions } from 'typebox-client';
 
 const definitions = {
   getUsers: {
     method: 'GET',
-    url: '/users',
+    // Id parameter is dynamicaly injected in the final url.
+    url: `/user/:id`,
     schema: {
-      querystring: Type.Object({
-        offset: Type.Optional(Type.Number()),
-        limit: Type.Optional(Type.Number()),
+      params: Type.Object({
+        id: Type.String(),
       }),
       response: {
         200: Type.Array(
@@ -52,7 +54,7 @@ const definitions = {
   },
 } as const;
 
-const { createClient, schema } = loadRouteDefinitions(definitions);
+const [createClient, schema] = loadRouteDefinitions(definitions);
 
 // fastify
 server.get('/users', { schema: schema.getUsers }, async (request, response) => {
@@ -63,8 +65,22 @@ server.get('/users', { schema: schema.getUsers }, async (request, response) => {
 const apiClient = createClient(axios.create({ baseURL: 'localhost' }));
 
 async () => {
-  const users = await apiClient.getUsers({ query: { limit: 1 } });
+  const user = await client.getUser({ params: { id: 'my-user-id' } }).call();
+  // { name: 'John', age: 30 }
 };
+```
+
+### Inject URL params
+
+typebox-client use the `my-url/:my-param` syntax to inject given parameters in the final url.
+
+### Access the final URL
+
+Sometime, instead of calling the client method you will want to get the computed url. It's usefull to use it as a link href for instance.
+
+```typescript
+const uri = await client.getUser({ params: { id: 'my-user-id' } }).call();
+// https://localhost/user/my-user-id
 ```
 
 ---
