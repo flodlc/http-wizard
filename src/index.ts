@@ -1,2 +1,2 @@
-export { loadRouteDefinitions } from './clientFactory';
+export { loadRouteDefinitions, createRouteDefinition } from './clientFactory';
 export { Type } from '@sinclair/typebox';
