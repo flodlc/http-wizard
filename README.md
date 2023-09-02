@@ -31,7 +31,7 @@ yarn add typebox-client
 ### Route definitions and api calls
 
 ```typescript
-import { loadRouteDefinitions, createRouteDefinition } from 'typebox-client';
+import { loadRouteDefinitions, createRouteDefinition, Type } from 'typebox-client';
 
 const definitions = {
   getUser: createRouteDefinition({
@@ -65,7 +65,7 @@ server.get('/user', { schema: schemas.getUser }, async (request, response) => {
 const apiClient = createClient(axios.create({ baseURL: 'localhost' }));
 
 async () => {
-  const user = await client.getUser({ params: { id: 'my-user-id' } }).call();
+  const user = await apiClient.getUser({ params: { id: 'my-user-id' } }).call();
   // { name: 'John', age: 30 }
 };
 ```
@@ -79,7 +79,7 @@ typebox-client use the `/my-url/:my-param` syntax to inject given parameters in 
 Sometime, instead of calling the client method you will want to get the computed url. It's usefull to use it as a link href for instance.
 
 ```typescript
-const url = await client.getUser({ params: { id: 'my-user-id' } }).url;
+const url = await apiClient.getUser({ params: { id: 'my-user-id' } }).url;
 // https://localhost/user/my-user-id
 ```
 
