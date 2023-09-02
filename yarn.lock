@@ -5341,6 +5341,8 @@ __metadata:
     ts-jest: ^29.1.1
     tsup: ^6.2.3
     typescript: ^5.0.4
+  peerDependencies:
+    "@sinclair/typebox": ^0.28.14
   languageName: unknown
   linkType: soft
 
