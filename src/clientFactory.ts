@@ -146,7 +146,8 @@ export const loadRouteDefinitions = <
   ] as unknown as [
     (instance: any) => {
       [K in keyof typeof definitions]: (
-        args: Simplify<Args<D[K]['schema']>>
+        args: Simplify<Args<D[K]['schema']>>,
+        config?: AxiosRequestConfig
       ) => {
         call: () => Promise<Simplify<Response<D[K]['schema']>>>;
         url: string;
