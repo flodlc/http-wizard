@@ -5238,6 +5238,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ts-fastify-client@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "ts-fastify-client@workspace:."
+  dependencies:
+    "@sinclair/typebox": ^0.28.14
+    "@types/jest": ^29.5.2
+    "@types/node": ^18.7.16
+    axios: ^1.4.0
+    esbuild-jest: ^0.5.0
+    jest: ^29.5.0
+    ts-jest: ^29.1.1
+    tsup: ^6.2.3
+    typescript: ^5.0.4
+    zod: ^3.22.4
+  peerDependencies:
+    "@sinclair/typebox": ^0.28.14
+    zod: ^3.22.4
+  languageName: unknown
+  linkType: soft
+
 "ts-interface-checker@npm:^0.1.9":
   version: 0.1.13
   resolution: "ts-interface-checker@npm:0.1.13"
@@ -5327,25 +5347,6 @@ __metadata:
   checksum: e6b32a3b3877f04339bae01c193b273c62ba7bfc9e325b8703c4ee1b32dc8fe4ef5dfa54bf78265e069f7667d058e360ae0f37be5af9f153b22382cd55a9afe0
   languageName: node
   linkType: hard
-
-"typebox-client@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "typebox-client@workspace:."
-  dependencies:
-    "@sinclair/typebox": ^0.28.14
-    "@types/jest": ^29.5.2
-    "@types/node": ^18.7.16
-    axios: ^1.4.0
-    esbuild-jest: ^0.5.0
-    jest: ^29.5.0
-    ts-jest: ^29.1.1
-    tsup: ^6.2.3
-    typescript: ^5.0.4
-    zod: ^3.22.4
-  peerDependencies:
-    "@sinclair/typebox": ^0.28.14
-  languageName: unknown
-  linkType: soft
 
 "typedarray-to-buffer@npm:^3.1.5":
   version: 3.1.5

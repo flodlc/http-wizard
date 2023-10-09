@@ -1,5 +1,5 @@
 {
-  "name": "typebox-client",
+  "name": "ts-fastify-client",
   "repository": "https://github.com/flodlc/typebox-client.git",
   "author": "flodlc <f.delacomble@gmail.com>",
   "license": "MIT",
