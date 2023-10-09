@@ -1,48 +1,55 @@
-import { Static, TSchema } from '@sinclair/typebox';
-import { AxiosInstance, AxiosRequestConfig } from 'axios';
+import { Static, TSchema } from "@sinclair/typebox";
+import { AxiosInstance, AxiosRequestConfig } from "axios";
+import { z } from "zod";
+import {
+  BodyFromSchemaTypeBox,
+  ParamsFromSchemaTypeBox,
+  QueryFromSchemaTypeBox,
+  ResponseFromSchemaTypeBox,
+  SchemaTypeBox,
+} from "./TypeboxAdapter";
+import {
+  BodyFromSchemaZod,
+  ParamsFromSchemaZod,
+  QueryFromSchemaZod,
+  ResponseFromSchemaZod,
+  SchemaZod,
+} from "./ZodAdapter";
 
-type Schema = {
-  params?: TSchema;
-  querystring?: TSchema;
-  body?: TSchema;
-  response: Record<number, TSchema>;
-};
+type Schema = SchemaTypeBox | SchemaZod;
 
-export type ParamsFromSchema<S extends Schema> = S extends {
-  params: TSchema;
-}
-  ? Static<S['params']>
-  : undefined;
+type ArgsFromTB<S extends SchemaTypeBox> =
+  (BodyFromSchemaTypeBox<S> extends undefined
+    ? { body?: undefined }
+    : { body: BodyFromSchemaTypeBox<S> }) &
+    (QueryFromSchemaTypeBox<S> extends undefined
+      ? { query?: undefined }
+      : { query: QueryFromSchemaTypeBox<S> }) &
+    (ParamsFromSchemaTypeBox<S> extends undefined
+      ? { params?: undefined }
+      : { params: ParamsFromSchemaTypeBox<S> });
 
-export type QueryFromSchema<S extends Schema> = S extends {
-  querystring: TSchema;
-}
-  ? Static<S['querystring']>
-  : undefined;
-
-export type BodyFromSchema<S extends Schema> = S extends {
-  body: TSchema;
-}
-  ? Static<S['body']>
-  : undefined;
-
-export type Args<S extends Schema> = (BodyFromSchema<S> extends undefined
+type ArgsFromZod<S extends SchemaZod> = (BodyFromSchemaZod<S> extends undefined
   ? { body?: undefined }
-  : { body: BodyFromSchema<S> }) &
-  (QueryFromSchema<S> extends undefined
+  : { body: BodyFromSchemaZod<S> }) &
+  (QueryFromSchemaZod<S> extends undefined
     ? { query?: undefined }
-    : { query: QueryFromSchema<S> }) &
-  (ParamsFromSchema<S> extends undefined
+    : { query: QueryFromSchemaZod<S> }) &
+  (ParamsFromSchemaZod<S> extends undefined
     ? { params?: undefined }
-    : { params: ParamsFromSchema<S> });
+    : { params: ParamsFromSchemaZod<S> });
 
-export type ResponseFromSchema<S> = S extends {
-  response: { 200: TSchema };
-}
-  ? Static<S['response'][200]>
-  : undefined;
+export type Args<S extends Schema> = S extends SchemaTypeBox
+  ? ArgsFromTB<S>
+  : S extends SchemaZod
+  ? ArgsFromZod<S>
+  : any;
 
-export type Response<S extends Schema> = ResponseFromSchema<S>;
+export type Response<S extends Schema> = S extends SchemaTypeBox
+  ? ResponseFromSchemaTypeBox<S>
+  : S extends SchemaZod
+  ? ResponseFromSchemaZod<S>
+  : unknown;
 
 export const callApi = async <S extends Schema>({
   config,
@@ -51,7 +58,7 @@ export const callApi = async <S extends Schema>({
   instance,
   ...props
 }: {
-  method: AxiosRequestConfig['method'];
+  method: AxiosRequestConfig["method"];
   url: string;
   config?: AxiosRequestConfig;
   instance: AxiosInstance;
@@ -72,18 +79,18 @@ export const createClientMethod =
     url,
     instance,
   }: {
-    method: AxiosRequestConfig['method'];
-    url: string | (({ params }: { params: Args<S>['params'] }) => string);
+    method: AxiosRequestConfig["method"];
+    url: string | (({ params }: { params: Args<S>["params"] }) => string);
     instance: AxiosInstance;
   }) =>
   (args: Args<S>, config?: AxiosRequestConfig) => {
     const processedUrl =
-      typeof url === 'string'
+      typeof url === "string"
         ? Object.entries(args.params ?? {}).reduce((acc, [key, value]) => {
-            const sdf = new RegExp(`:${key}`, 'g');
+            const sdf = new RegExp(`:${key}`, "g");
             return acc.replace(sdf, value as string);
           }, url)
-        : url({ params: args.params as Args<S>['params'] });
+        : url({ params: args.params as Args<S>["params"] });
     return {
       call: () =>
         callApi<S>({
@@ -108,7 +115,7 @@ type Simplify<T> = { [K in keyof T]: T[K] } & {};
 
 export const createRouteDefinition = <
   R extends {
-    method: AxiosRequestConfig['method'];
+    method: AxiosRequestConfig["method"];
     url: string | (({ params }: { params: { [s: string]: string } }) => string);
     schema: Schema;
   }
@@ -119,7 +126,7 @@ export const createRouteDefinition = <
 export const loadRouteDefinitions = <
   D extends {
     [K in keyof D]: {
-      method: AxiosRequestConfig['method'];
+      method: AxiosRequestConfig["method"];
       url:
         | string
         | (({ params }: { params: { [s: string]: string } }) => string);
@@ -146,13 +153,24 @@ export const loadRouteDefinitions = <
   ] as unknown as [
     (instance: any) => {
       [K in keyof typeof definitions]: (
-        args: Simplify<Args<D[K]['schema']>>,
+        args: Simplify<Args<D[K]["schema"]>>,
         config?: AxiosRequestConfig
       ) => {
-        call: () => Promise<Simplify<Response<D[K]['schema']>>>;
+        call: () => Promise<Simplify<Response<D[K]["schema"]>>>;
         url: string;
       };
     },
-    { [K in keyof D]: D[K]['schema'] }
+    { [K in keyof D]: D[K]["schema"] }
   ];
 };
+
+const [createClient, sc] = loadRouteDefinitions({
+  toto: {
+    method: "GET",
+    url: "",
+    schema: {
+      body: z.object({ id: z.string() }),
+      response: { 200: z.string() },
+    },
+  },
+});
