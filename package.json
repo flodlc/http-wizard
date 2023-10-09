@@ -29,7 +29,7 @@
   },
   "peerDependencies": {
     "@sinclair/typebox": "^0.28.14",
-    "zod": "^3.22.4"
+    "zod": "3.x"
   },
   "files": [
     "dist/*"
