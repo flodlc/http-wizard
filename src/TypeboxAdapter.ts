@@ -1,5 +1,4 @@
 import { Static, TSchema } from "@sinclair/typebox";
-import { Schema } from "zod";
 
 export type SchemaTypeBox = {
   params?: TSchema;
@@ -26,8 +25,11 @@ export type BodyFromSchemaTypeBox<S extends SchemaTypeBox> = S extends {
   ? Static<S["body"]>
   : undefined;
 
-export type ResponseFromSchemaTypeBox<S extends SchemaTypeBox> = S extends {
-  response: { 200: TSchema };
+export type ResponseFromSchemaTypeBox<
+  S extends SchemaTypeBox,
+  OK extends number = 200
+> = S extends {
+  response: { [C in OK]: TSchema };
 }
-  ? Static<S["response"][200]>
+  ? Static<S["response"][OK]>
   : undefined;

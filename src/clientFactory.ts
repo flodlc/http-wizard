@@ -45,10 +45,13 @@ export type Args<S extends Schema> = S extends SchemaTypeBox
   ? ArgsFromZod<S>
   : any;
 
-export type Response<S extends Schema> = S extends SchemaTypeBox
-  ? ResponseFromSchemaTypeBox<S>
+export type Response<
+  S extends Schema,
+  OK extends number = 200
+> = S extends SchemaTypeBox
+  ? ResponseFromSchemaTypeBox<S, OK>
   : S extends SchemaZod
-  ? ResponseFromSchemaZod<S>
+  ? ResponseFromSchemaZod<S, OK>
   : unknown;
 
 export const callApi = async <S extends Schema>({
@@ -113,25 +116,20 @@ export const createClientMethod =
 
 type Simplify<T> = { [K in keyof T]: T[K] } & {};
 
-export const createRouteDefinition = <
-  R extends {
-    method: AxiosRequestConfig["method"];
-    url: string | (({ params }: { params: { [s: string]: string } }) => string);
-    schema: Schema;
-  }
->(
+type RouteDefinition = {
+  method: AxiosRequestConfig["method"];
+  url: string | (({ params }: { params: { [s: string]: string } }) => string);
+  okCode?: number;
+  schema: Schema;
+};
+
+export const createRouteDefinition = <const R extends RouteDefinition>(
   routeDefinition: R
 ) => routeDefinition;
 
 export const loadRouteDefinitions = <
-  D extends {
-    [K in keyof D]: {
-      method: AxiosRequestConfig["method"];
-      url:
-        | string
-        | (({ params }: { params: { [s: string]: string } }) => string);
-      schema: Schema;
-    };
+  const D extends {
+    [K in keyof D]: RouteDefinition;
   }
 >(
   definitions: D
@@ -156,21 +154,17 @@ export const loadRouteDefinitions = <
         args: Simplify<Args<D[K]["schema"]>>,
         config?: AxiosRequestConfig
       ) => {
-        call: () => Promise<Simplify<Response<D[K]["schema"]>>>;
+        call: () => Promise<
+          Simplify<
+            Response<
+              D[K]["schema"],
+              D[K]["okCode"] extends number ? D[K]["okCode"] : 200
+            >
+          >
+        >;
         url: string;
       };
     },
     { [K in keyof D]: D[K]["schema"] }
   ];
 };
-
-const [createClient, sc] = loadRouteDefinitions({
-  toto: {
-    method: "GET",
-    url: "",
-    schema: {
-      body: z.object({ id: z.string() }),
-      response: { 200: z.string() },
-    },
-  },
-});

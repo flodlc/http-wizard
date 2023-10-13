@@ -51,7 +51,6 @@ describe("Check requests parameters and response", () => {
     const client = createClient({ request, getUri: () => "" } as any);
     const user = await client.getUser({ params: { id: "toto" } }).call();
 
-    console.log(request.mock.calls?.[0]?.[0]);
     expect(request.mock.calls?.[0]?.[0]).toMatchObject({
       url: "/user/toto",
       method: "GET",

@@ -24,8 +24,11 @@ export type BodyFromSchemaZod<S extends SchemaZod> = S extends {
   ? z.infer<S["body"]>
   : undefined;
 
-export type ResponseFromSchemaZod<S extends SchemaZod> = S extends {
-  response: { 200: z.AnyZodObject };
+export type ResponseFromSchemaZod<
+  S extends SchemaZod,
+  OK extends number = 200
+> = S extends {
+  response: { [C in OK]: z.Schema };
 }
-  ? z.infer<S["response"][200]>
+  ? z.infer<S["response"][OK]>
   : undefined;
