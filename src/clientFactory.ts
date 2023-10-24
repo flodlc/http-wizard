@@ -1,6 +1,5 @@
-import { Static, TSchema } from "@sinclair/typebox";
+import { Type } from "@sinclair/typebox";
 import { AxiosInstance, AxiosRequestConfig } from "axios";
-import { z } from "zod";
 import {
   BodyFromSchemaTypeBox,
   ParamsFromSchemaTypeBox,
@@ -15,8 +14,7 @@ import {
   ResponseFromSchemaZod,
   SchemaZod,
 } from "./ZodAdapter";
-
-type Schema = SchemaTypeBox | SchemaZod;
+import { RouteDefinition, Simplify, Schema } from "./types";
 
 type ArgsFromTB<S extends SchemaTypeBox> =
   (BodyFromSchemaTypeBox<S> extends undefined
@@ -114,25 +112,28 @@ export const createClientMethod =
     };
   };
 
-type Simplify<T> = { [K in keyof T]: T[K] } & {};
-
-type RouteDefinition = {
-  method: AxiosRequestConfig["method"];
-  url: string | (({ params }: { params: { [s: string]: string } }) => string);
-  okCode?: number;
-  schema: Schema;
-};
-
 export const createRouteDefinition = <const R extends RouteDefinition>(
   routeDefinition: R
 ) => routeDefinition;
 
+export type RouteClient<D extends RouteDefinition> = (
+  args: Simplify<Args<D["schema"]>>,
+  config?: AxiosRequestConfig
+) => {
+  call: () => Promise<
+    Simplify<
+      Response<D["schema"], D["okCode"] extends number ? D["okCode"] : 200>
+    >
+  >;
+  url: string;
+};
+
 export const loadRouteDefinitions = <
-  const D extends {
-    [K in keyof D]: RouteDefinition;
+  const Definitions extends {
+    [K in keyof Definitions]: RouteDefinition;
   }
 >(
-  definitions: D
+  definitions: Definitions
 ) => {
   return [
     (instance: AxiosInstance) => {
@@ -150,21 +151,8 @@ export const loadRouteDefinitions = <
     ),
   ] as unknown as [
     (instance: any) => {
-      [K in keyof typeof definitions]: (
-        args: Simplify<Args<D[K]["schema"]>>,
-        config?: AxiosRequestConfig
-      ) => {
-        call: () => Promise<
-          Simplify<
-            Response<
-              D[K]["schema"],
-              D[K]["okCode"] extends number ? D[K]["okCode"] : 200
-            >
-          >
-        >;
-        url: string;
-      };
+      [K in keyof typeof definitions]: RouteClient<Definitions[K]>;
     },
-    { [K in keyof D]: D[K]["schema"] }
+    { [K in keyof Definitions]: Definitions[K]["schema"] }
   ];
 };
