@@ -15,7 +15,9 @@ const parseRouteName = (name: string) => {
     : undefined;
   if (!method) throw "wrong method";
 
-  const url = name.replace(method.toLowerCase(), "").toLowerCase();
+  const url = name
+    .replace(method.toLowerCase(), "")
+    .replace(/[A-Z]/g, (letter) => `/${letter.toLowerCase()}`);
   return { method, url };
 };
 
