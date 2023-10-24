@@ -35,17 +35,9 @@ export const createClient = <
   return new Proxy(
     {},
     {
-      get: (_, prop: string) => {
-        const method = prop.startsWith("post")
-          ? "POST"
-          : prop.startsWith("get")
-          ? "GET"
-          : undefined;
-        if (!method) throw "wrong method";
-
-        const url = prop.replace(method.toLowerCase(), "").toLowerCase();
-
-        return createClientMethod({ method, url, instance });
+      get: (_, name: string) => {
+        const parsed = parseRouteName(name);
+        return createClientMethod({ ...parsed, instance });
       },
     }
   ) as {
