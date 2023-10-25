@@ -7,18 +7,30 @@ import {
 import { Type } from "@sinclair/typebox";
 import { RouteDefinition, Schema } from "./types";
 
+const methods = [
+  "GET",
+  "POST",
+  "PUT",
+  "DELETE",
+  "HEAD",
+  "PATCH",
+  "OPTIONS",
+  "COPY",
+  "MOVE",
+  "SEARCH",
+] as const;
+
 const parseRouteName = (name: string) => {
-  const method = name.startsWith("post")
-    ? "POST"
-    : name.startsWith("get")
-    ? "GET"
-    : undefined;
+  const method = methods.find((item) =>
+    name.startsWith(item.toLocaleLowerCase())
+  );
+
   if (!method) throw "wrong method";
 
   const url = name
     .replace(method.toLowerCase(), "")
     .replace(/[A-Z]/g, (letter) => `/${letter.toLowerCase()}`);
-  return { method, url };
+  return { method, url } as const;
 };
 
 export const createClient = <
