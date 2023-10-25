@@ -4,7 +4,6 @@ import {
   createClientMethod,
   createRouteDefinition,
 } from "./clientFactory";
-import { Type } from "@sinclair/typebox";
 import { RouteDefinition, Schema } from "./types";
 
 const methods = [
@@ -63,7 +62,11 @@ export const createRoute = <N extends string, S extends Schema>(
 ) => {
   return {
     handle: (
-      callback: (args: { method: string; url: string; schema: S }) => void
+      callback: (args: {
+        method: (typeof methods)[number];
+        url: string;
+        schema: S;
+      }) => void
     ) => {
       const parsed = parseRouteName(name);
       callback({ ...parsed, schema });
