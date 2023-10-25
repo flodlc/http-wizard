@@ -5,6 +5,7 @@ import {
   createRouteDefinition,
 } from "./clientFactory";
 import { RouteDefinition, Schema } from "./types";
+import { z } from "zod";
 
 const methods = [
   "GET",
@@ -56,21 +57,24 @@ export const createClient = <
   };
 };
 
-export const createRoute = <N extends string, S extends Schema>(
+export const createRoute = <
+  const N extends string,
+  const D extends { schema: Schema; okCode?: number }
+>(
   name: N,
-  schema: S
+  options: D
 ) => {
   return {
     handle: (
       callback: (args: {
         method: (typeof methods)[number];
         url: string;
-        schema: S;
+        schema: D["schema"];
       }) => void
     ) => {
       const parsed = parseRouteName(name);
-      callback({ ...parsed, schema });
-      const routeDef = createRouteDefinition({ ...parsed, schema });
+      callback({ ...parsed, schema: options.schema });
+      const routeDef = createRouteDefinition({ ...parsed, ...options });
       return { [name]: routeDef } as { [k in N]: typeof routeDef };
     },
   };
