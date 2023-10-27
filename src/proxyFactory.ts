@@ -6,6 +6,7 @@ import {
 } from "./clientFactory";
 import { RouteDefinition, Schema } from "./types";
 import { z } from "zod";
+import { Type } from "@sinclair/typebox";
 
 const methods = [
   "GET",
@@ -78,4 +79,14 @@ export const createRoute = <
       return { [name]: routeDef } as { [k in N]: typeof routeDef };
     },
   };
+};
+
+export const createRouter = <
+  const Definitions extends {
+    [K in keyof Definitions]: RouteDefinition;
+  }
+>(
+  routes: Definitions
+): Definitions => {
+  return routes;
 };
