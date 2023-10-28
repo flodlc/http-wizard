@@ -69,4 +69,4 @@ const users = await apiClient.getUsers({}).call();
 
 Easy right ?  
 Here is how to get it work in your project:
-[getting-started](/docs/getting-started)
+[getting-started](/getting-started)

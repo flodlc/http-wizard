@@ -61,4 +61,4 @@ export type Router = typeof router;
 Router type is the type of all the server routes.
 Depends on your architecture you will import it from your client or export it through a package.
 
-You're all set to use http-wizard on the [client side](/docs/recipes/client-usage) !
+You're all set to use http-wizard on the [client side](/recipes/client-usage) !

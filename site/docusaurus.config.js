@@ -85,11 +85,11 @@ const config = {
             items: [
               {
                 label: "Intro",
-                to: "/docs/intro",
+                to: "/",
               },
               {
                 label: "Getting started",
-                to: "/docs/getting-started",
+                to: "/getting-started",
               },
             ],
           },
