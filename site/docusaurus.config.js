@@ -62,7 +62,7 @@ const config = {
       // Replace with your project's social card
       image: "img/docusaurus-social-card.jpg",
       navbar: {
-        title: "ts-api",
+        title: "Http-wizard",
         items: [
           {
             type: "docSidebar",
