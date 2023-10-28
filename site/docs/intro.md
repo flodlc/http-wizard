@@ -15,6 +15,13 @@ It's fully compliant with HTTP standards and facilitates the easy usage of your 
 - Drastically simplify your codebase and ensure validation best practices
 - Allow HTTP standards-compliant route naming and usage, with or without http-wizard as a client.
 
+### Why not GraphQL or tRPC ?
+
+Both are excellent choices!  
+<b>Http-wizard</b> allows maintaining a standard HTTP API and to keep tools such as Swagger, etc to document your API.  
+For people who wants a tRPC like DX but still using fastify or Express with full control over route naming, http-wizard is made for you !  
+It combines the best of both worlds, ensuring a smooth, efficient, and productive development process.
+
 ### How it works ?
 
 urrently, http-wizard utilizes Zod or Typebox for validation.
