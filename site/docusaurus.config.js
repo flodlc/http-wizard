@@ -7,11 +7,12 @@ const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: "Http-wizard",
-  tagline: "Dinosaurs are cool",
+  tagline:
+    "Http-wizard is a type safe api-client designed to streamline the development of your application. It's fully compliant with HTTP standards and facilitates the easy usage of your API with non ts/js clients.",
   favicon: "img/favicon.ico",
 
   // Set the production url of your site here
-  url: "https://your-docusaurus-test-site.com",
+  url: "https://http-wizard.vercel.app/",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: "/",
