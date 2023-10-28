@@ -2723,6 +2723,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"http-wizard@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "http-wizard@workspace:."
+  dependencies:
+    "@sinclair/typebox": ^0.28.14
+    "@types/jest": ^29.5.2
+    "@types/node": ^18.7.16
+    axios: ^1.4.0
+    esbuild-jest: ^0.5.0
+    jest: ^29.5.0
+    ts-jest: ^29.1.1
+    tsup: ^6.2.3
+    typescript: ^5.0.4
+    zod: ^3.22.4
+  peerDependencies:
+    "@sinclair/typebox": ^0.28.14
+    axios: ^1.4.0
+    zod: 3.x
+  languageName: unknown
+  linkType: soft
+
 "https-proxy-agent@npm:^5.0.0":
   version: 5.0.1
   resolution: "https-proxy-agent@npm:5.0.1"
@@ -5237,27 +5258,6 @@ __metadata:
   checksum: 49117f5f410d19c84b0464d29afb9642c863bc5ba40fcb9a245d474c6d5cc64d1b177a6e6713129eb346b40aebb9d4631d967517f9fbe8251c35b21b13cd96c7
   languageName: node
   linkType: hard
-
-"ts-fastify-client@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "ts-fastify-client@workspace:."
-  dependencies:
-    "@sinclair/typebox": ^0.28.14
-    "@types/jest": ^29.5.2
-    "@types/node": ^18.7.16
-    axios: ^1.4.0
-    esbuild-jest: ^0.5.0
-    jest: ^29.5.0
-    ts-jest: ^29.1.1
-    tsup: ^6.2.3
-    typescript: ^5.0.4
-    zod: ^3.22.4
-  peerDependencies:
-    "@sinclair/typebox": ^0.28.14
-    axios: ^1.4.0
-    zod: 3.x
-  languageName: unknown
-  linkType: soft
 
 "ts-interface-checker@npm:^0.1.9":
   version: 0.1.13

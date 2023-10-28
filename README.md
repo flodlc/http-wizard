@@ -1,12 +1,17 @@
-<h1 align="center">ts-fastify-client</h1>
+<h1 align="center">http-wizard</h1>
 <p align="center"><a href="https://git.io/typing-svg"><img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=18&duration=2000&pause=2000&center=true&width=540&height=80&lines=First+class+api+client+for+fastify." alt="Typing SVG" /></a></p>
 
-### ts-fastify-client is a simple client for Zod and Typebox schema based api using:
+## Introduction
 
-- Fully written in TypeScript
-- Native Zod support
-- Native Typebox support
-- axios (more http client supported soon) as a http client
+Http-wizard is a type safe api-client designed to streamline the development of your application.  
+It's fully complient with HTTP standards and allows easy usage of your api with non ts/js client.
+
+### What it can do:
+
+- Export a typesafe client api
+- Validate input and output of your routes
+- Drasticly simplify your codebase and ensure validation good practices
+- Allow HTTP standards route naming and usage with or without http-wizard.
 
 ---
 
@@ -19,128 +24,64 @@ Table of Contents:
 
 ## Installation
 
-To get started, install ts-fastify-client using npm or yarn:
+To get started, install http-wizard using npm or yarn:
 
 ```sh
-npm install ts-fastify-client
+npm install http-wizard
 # or
-yarn add ts-fastify-client
+yarn add http-wizard
 ```
 
-## Usage with Zod
+## Usage
 
-### Route definitions and api calls
+Currently http-wizard uses Zod or Typebox for validation.
+Here is an exemple with Zod.
 
-```typescript
-import { loadRouteDefinitions, createRouteDefinition, z } from 'ts-fastify-client';
+Let's first create a route on the server:
 
-const definitions = {
-  getUser: createRouteDefinition({
-    method: 'GET',
-    // Id parameter is dynamicaly injected in the final url.
-    url: `/user/:id`,
+```typescript title="Route creation with Fastify and Zod"
+// server.ts
+import { createRoute, z } from "http-wizard";
+
+export const getUsers = (fastify: FastifyInstance) => {
+  return createRoute("get/users", {
     schema: {
-      params: z.object({
-        id: z.string(),
-      }),
       response: {
         200: z.array(
           z.object({
+            id: z.string(),
             name: z.string(),
-            age: z.number(),
           })
         ),
       },
     },
-  }),
-};
-
-const [createClient, schemas] = loadRouteDefinitions(definitions);
-
-// fastify
-server.get('/user', { schema: schemas.getUser }, async (request, response) => {
-  response.status(200).send([{ name: 'John', age: 30 }]);
-});
-
-// client
-const apiClient = createClient(axios.create({ baseURL: 'localhost' }));
-
-async () => {
-  const user = await apiClient.getUser({ params: { id: 'my-user-id' } }).call();
-  // { name: 'John', age: 30 }
-};
-```
-
-### Inject URL params
-
-ts-fastify-client use the `/my-url/:my-param` syntax to inject given parameters in the final url.
-
-### Access the final URL
-
-Sometime, instead of calling the client method you will want to get the computed url. It's usefull to use it as a link href for instance.
-
-```typescript
-const url = await apiClient.getUser({ params: { id: 'my-user-id' } }).url;
-// https://localhost/user/my-user-id
-```
-
-## Usage with Typebox
-
-### Route definitions and api calls
-
-```typescript
-import { loadRouteDefinitions, createRouteDefinition, Type } from 'ts-fastify-client';
-
-const definitions = {
-  getUser: createRouteDefinition({
-    method: 'GET',
-    // Id parameter is dynamicaly injected in the final url.
-    url: `/user/:id`,
-    schema: {
-      params: Type.Object({
-        id: Type.String(),
-      }),
-      response: {
-        200: Type.Array(
-          Type.Object({
-            name: Type.String(),
-            age: Type.Number(),
-          })
-        ),
+  }).handle((props) => {
+    fastify.route({
+      ...props,
+      handler: (request) => {
+        const users = await db.getUsers();
+        return users;
       },
-    },
-  }),
+    });
+  });
 };
 
-const [createClient, schemas] = loadRouteDefinitions(definitions);
-
-// fastify
-server.get('/user', { schema: schemas.getUser }, async (request, response) => {
-  response.status(200).send([{ name: 'John', age: 30 }]);
-});
-
-// client
-const apiClient = createClient(axios.create({ baseURL: 'localhost' }));
-
-async () => {
-  const user = await apiClient.getUser({ params: { id: 'my-user-id' } }).call();
-  // { name: 'John', age: 30 }
-};
+const router = { ...getUsers() };
+export type Router = typeof router;
 ```
 
-### Inject URL params
+Now, let's use the Router type on the client:
 
-ts-fastify-client use the `/my-url/:my-param` syntax to inject given parameters in the final url.
+```typescript title="Client instanciation with axios"
+// client.ts
+import { createClient } from "http-wizard";
+import axios from "axios";
 
-### Access the final URL
+import type { Router } from "./server";
 
-Sometime, instead of calling the client method you will want to get the computed url. It's usefull to use it as a link href for instance.
-
-```typescript
-const url = await apiClient.getUser({ params: { id: 'my-user-id' } }).url;
-// https://localhost/user/my-user-id
+const apiClient = createClient<Router>(axios.instance());
+const users = await apiClient.getUsers({}).call();
+// users array is safe: { id:string, name:string }[]
 ```
 
----
-
-That's it! You can now use ts-fastify-client to create fully typed and safe api client.
+Easy right ?

@@ -4,16 +4,16 @@ sidebar_position: 2
 
 # Usage on the client
 
-### <i>✨ Client side is where ts-client starts to shine ✨</i>
+### <i>✨ Client side is where http-wizard starts to shine ✨</i>
 
-On the client side, we need the exported `Router` type from the server and having ts-client installed.
+On the client side, we need the exported `Router` type from the server and having http-wizard installed.
 
 Let's instanciate our apiClient !
 
-```typescript title="Client instanciation with axios"
+```typescript title="Client instancation with axios"
 // client/apiClient.ts
 import axios from "axios";
-import { createClient } from "ts-client";
+import { createClient } from "http-wizard";
 
 import type { Router } from "server";
 

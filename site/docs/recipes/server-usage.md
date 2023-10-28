@@ -4,14 +4,14 @@ sidebar_position: 1
 
 # Usage on the server
 
-On the server, ts-client is mainly used to link the route validation schemas with the exported `Router` type.  
+On the server, http-wizard is mainly used to link the route validation schemas with the exported `Router` type.  
 `Router` type is what allows the typesafety on the client side.
 
 basic exemple of route definition:
 
 ```typescript title="basic route definition"
 // server/getUserById.ts
-import { createRoute, z } from "ts-client";
+import { createRoute, z } from "http-wizard";
 
 export const getUserById = (fastify: FastifyInstance) => {
   return createRoute("get/user/:id", {
@@ -61,4 +61,4 @@ export type Router = typeof router;
 Router type is the type of all the server routes.
 Depends on your architecture you will import it from your client or export it through a package.
 
-You're all set to use ts-client on the [client side](/docs/recipes/client-usage) !
+You're all set to use http-wizard on the [client side](/docs/recipes/client-usage) !

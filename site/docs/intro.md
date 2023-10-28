@@ -1,10 +1,11 @@
 ---
 sidebar_position: 1
+slug: /
 ---
 
 # Introduction
 
-Ts-client is a type safe api-client designed to streamline the development of your application.  
+Http-wizard is a type safe api-client designed to streamline the development of your application.  
 It's fully complient with HTTP standards and allows easy usage of your api with non ts/js client.
 
 ### What it can do:
@@ -12,18 +13,18 @@ It's fully complient with HTTP standards and allows easy usage of your api with 
 - Export a typesafe client api
 - Validate input and output of your routes
 - Drasticly simplify your codebase and ensure validation good practices
-- Allow HTTP standards route naming and usage with or without ts-client.
+- Allow HTTP standards route naming and usage with or without http-wizard.
 
 ### How it works ?
 
-Currently ts-client uses Zod or Typebox for validation.
+Currently http-wizard uses Zod or Typebox for validation.
 Here is an exemple with Zod.
 
 Let's first create a route on the server:
 
 ```typescript title="Route creation with Fastify and Zod"
 // server.ts
-import { createRoute, z } from "ts-client";
+import { createRoute, z } from "http-wizard";
 
 export const getUsers = (fastify: FastifyInstance) => {
   return createRoute("get/users", {
@@ -56,7 +57,7 @@ Now, let's use the Router type on the client:
 
 ```typescript title="Client instanciation with axios"
 // client.ts
-import { createClient } from "ts-client";
+import { createClient } from "http-wizard";
 import axios from "axios";
 
 import type { Router } from "./server";

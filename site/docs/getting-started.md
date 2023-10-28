@@ -6,24 +6,24 @@ sidebar_position: 2
 
 ## Installation
 
-To get started, install ts-client using npm or yarn:
+To get started, install http-wizard using npm or yarn:
 
 ```bash title="command"
-npm install ts-client
+npm install http-wizard
 # or
-yarn add ts-client
+yarn add http-wizard
 ```
 
 ## How it works ?
 
-Currently ts-client uses Zod or Typebox for validation.
+Currently http-wizard uses Zod or Typebox for validation.
 Here is an exemple with Zod.
 
 Let's first create a route on the server:
 
 ```typescript title="Route creation with Fastify and Zod"
 // server.ts
-import { createRoute, z } from "ts-client";
+import { createRoute, z } from "http-wizard";
 
 export const getUsers = (fastify: FastifyInstance) => {
   return createRoute("get/users", {
@@ -56,7 +56,7 @@ Now, let's use the Router type on the client:
 
 ```typescript title="Client instancation with axios"
 // client.ts
-import { createClient } from "ts-client";
+import { createClient } from "http-wizard";
 import axios from "axios";
 
 import type { Router } from "./server";
