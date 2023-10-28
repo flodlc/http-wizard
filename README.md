@@ -3,7 +3,7 @@
 
 ### Full documentation website:
 
-[http-wizard.vercel.app]()
+[http-wizard.vercel.app](https://http-wizard.vercel.app)
 
 ## Introduction
 
