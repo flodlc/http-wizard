@@ -29,8 +29,8 @@
   },
   "peerDependencies": {
     "@sinclair/typebox": "^0.28.14",
-    "zod": "3.x",
-    "axios": "^1.4.0"
+    "axios": "^1.4.0",
+    "zod": "3.x"
   },
   "files": [
     "dist/*"
