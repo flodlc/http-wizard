@@ -61,9 +61,12 @@ const config = {
         respectPrefersColorScheme: false,
       },
       // Replace with your project's social card
-      image: "img/docusaurus-social-card.jpg",
+      image: "img/social.jpg",
       navbar: {
-        title: "Http-wizard",
+        logo: {
+          alt: "My Site Logo",
+          src: "img/logo_white_full.png",
+        },
         items: [
           {
             type: "docSidebar",

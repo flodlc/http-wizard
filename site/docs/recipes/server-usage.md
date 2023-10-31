@@ -62,3 +62,26 @@ Router type is the type of all the server routes.
 Depends on your architecture you will import it from your client or export it through a package.
 
 You're all set to use http-wizard on the [client side](/recipes/client-usage) !
+
+### Custom repsonse code
+
+By default, the type definition is inferred from the 200 response schema.  
+The property `okCode` allows inferring the response type from a given response code.
+
+```typescript title="Usage of okCode property"
+// server/getUserById.ts
+import { createRoute, z } from "http-wizard";
+
+export const getUserById = (fastify: FastifyInstance) => {
+  return createRoute("get/user/:id", {
+    okCode: 201,
+    schema: {
+      response: {
+        201: z.object({ name: z.string() }),
+      },
+    },
+  }).handle((props) => {
+    // ... create your server route as usual
+  });
+};
+```
