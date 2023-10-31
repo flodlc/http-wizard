@@ -24,7 +24,7 @@ It combines the best of both worlds, ensuring a smooth, efficient, and productiv
 
 ### How it works ?
 
-urrently, http-wizard utilizes Zod or Typebox for validation.
+Currently, http-wizard utilizes Zod or Typebox for validation.
 Here is an example with Zod.
 
 First, let's create a route on the server:
