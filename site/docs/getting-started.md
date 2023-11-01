@@ -26,7 +26,8 @@ Let's first create a route on the server:
 import { createRoute, z } from "http-wizard";
 
 export const getUsers = (fastify: FastifyInstance) => {
-  return createRoute("get/users", {
+  return createRoute("/users", {
+    method: "GET",
     schema: {
       response: {
         200: z.array(
@@ -62,7 +63,7 @@ import axios from "axios";
 import type { Router } from "./server";
 
 const apiClient = createClient<Router>(axios.instance());
-const users = await apiClient["get/users"]({}).call();
+const users = await apiClient.get("/users", {}).call();
 // users array is safe: { id:string, name:string }[]
 ```
 

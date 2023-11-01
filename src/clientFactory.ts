@@ -1,4 +1,3 @@
-import { Type } from "@sinclair/typebox";
 import { AxiosInstance, AxiosRequestConfig } from "axios";
 import {
   BodyFromSchemaTypeBox,
@@ -27,14 +26,20 @@ type ArgsFromTB<S extends SchemaTypeBox> =
       ? { params?: undefined }
       : { params: ParamsFromSchemaTypeBox<S> });
 
+type Empty<O extends Object> = O[keyof O] extends undefined | never
+  ? true
+  : false;
+
+type NeverIfEmpty<O extends Object> = Empty<O> extends true ? {} : O;
+
 type ArgsFromZod<S extends SchemaZod> = (BodyFromSchemaZod<S> extends undefined
-  ? { body?: undefined }
+  ? { body?: never }
   : { body: BodyFromSchemaZod<S> }) &
   (QueryFromSchemaZod<S> extends undefined
-    ? { query?: undefined }
+    ? { query?: never }
     : { query: QueryFromSchemaZod<S> }) &
   (ParamsFromSchemaZod<S> extends undefined
-    ? { params?: undefined }
+    ? { params?: never }
     : { params: ParamsFromSchemaZod<S> });
 
 export type Args<S extends Schema> = S extends SchemaTypeBox
@@ -68,91 +73,61 @@ export const callApi = async <S extends Schema>({
     method,
     url,
     ...config,
-    params: props.query,
-    data: props.body,
+    params: "query" in props ? props.query : undefined,
+    data: "body" in props ? props.body : undefined,
   });
   return data as Response<S>;
 };
 
-export const createClientMethod =
-  <S extends Schema>({
-    method,
-    url,
-    instance,
-  }: {
-    method: AxiosRequestConfig["method"];
-    url: string | (({ params }: { params: Args<S>["params"] }) => string);
-    instance: AxiosInstance;
-  }) =>
-  (args: Args<S>, config?: AxiosRequestConfig) => {
-    const processedUrl =
-      typeof url === "string"
-        ? Object.entries(args.params ?? {}).reduce((acc, [key, value]) => {
-            const sdf = new RegExp(`:${key}`, "g");
-            return acc.replace(sdf, value as string);
-          }, url)
-        : url({ params: args.params as Args<S>["params"] });
-    return {
-      call: () =>
-        callApi<S>({
-          method,
-          url: processedUrl,
-          config,
-          instance,
-          ...args,
-        }),
-      url: instance.getUri({
+export const createClientMethod = <S extends Schema>({
+  method,
+  url,
+  instance,
+  args,
+  config,
+}: {
+  method: AxiosRequestConfig["method"];
+  url: string;
+  instance: AxiosInstance;
+  args: Args<S>;
+  config?: AxiosRequestConfig;
+}) => {
+  const processedUrl = Object.entries(
+    ("params" in args ? args?.params : undefined) ?? {}
+  ).reduce(
+    (acc, [key, value]) =>
+      acc.replace(new RegExp(`:${key}`, "g"), value as string),
+    url
+  );
+  return {
+    call: () =>
+      callApi<S>({
         method,
         url: processedUrl,
-        params: args.query,
-        data: args.body,
-        ...config,
+        config,
+        instance,
         ...args,
       }),
-    };
+    url: instance.getUri({
+      method,
+      url: processedUrl,
+      params: args?.query,
+      data: args?.body,
+      ...config,
+      ...args,
+    }),
   };
+};
+
+export type OkResponse<D extends RouteDefinition> = Simplify<
+  Response<D["schema"], D["okCode"] extends number ? D["okCode"] : 200>
+>;
+
+export type RouteClient<D extends RouteDefinition> = {
+  call: () => Promise<OkResponse<D>>;
+  url: string;
+};
 
 export const createRouteDefinition = <const R extends RouteDefinition>(
   routeDefinition: R
 ) => routeDefinition;
-
-export type RouteClient<D extends RouteDefinition> = (
-  args: Simplify<Args<D["schema"]>>,
-  config?: AxiosRequestConfig
-) => {
-  call: () => Promise<
-    Simplify<
-      Response<D["schema"], D["okCode"] extends number ? D["okCode"] : 200>
-    >
-  >;
-  url: string;
-};
-
-export const loadRouteDefinitions = <
-  const Definitions extends {
-    [K in keyof Definitions]: RouteDefinition;
-  }
->(
-  definitions: Definitions
-) => {
-  return [
-    (instance: AxiosInstance) => {
-      return Object.fromEntries(
-        Object.entries(definitions).map(([key, def]) => {
-          return [key, createClientMethod({ ...(def as any), instance })];
-        })
-      );
-    },
-    Object.fromEntries(
-      Object.entries(definitions).map(([key, def]) => {
-        const schema = (def as any).schema;
-        return [key, schema];
-      })
-    ),
-  ] as unknown as [
-    (instance: any) => {
-      [K in keyof typeof definitions]: RouteClient<Definitions[K]>;
-    },
-    { [K in keyof Definitions]: Definitions[K]["schema"] }
-  ];
-};

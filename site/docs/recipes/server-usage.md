@@ -73,7 +73,8 @@ The property `okCode` allows inferring the response type from a given response c
 import { createRoute, z } from "http-wizard";
 
 export const getUserById = (fastify: FastifyInstance) => {
-  return createRoute("get/user/:id", {
+  return createRoute("/user/:id", {
+    method: "GET",
     okCode: 201,
     schema: {
       response: {

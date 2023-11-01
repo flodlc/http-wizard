@@ -1,60 +1,69 @@
 import { Type } from "@sinclair/typebox";
-import { loadRouteDefinitions, createRouteDefinition } from "./clientFactory";
+import { createClient, createRoute } from "./proxyFactory";
 
-const routeDefinitions = {
-  getUser: createRouteDefinition({
-    method: "GET",
-    url: `/user/:id`,
-    schema: {
-      params: Type.Object({
-        id: Type.String(),
-      }),
-      response: {
-        200: Type.Array(
-          Type.Object({
-            name: Type.String(),
-            age: Type.Number(),
-          })
-        ),
-      },
+const getUser = createRoute("/user/:id", {
+  method: "GET",
+  schema: {
+    params: Type.Object({
+      id: Type.String(),
+    }),
+    response: {
+      200: Type.Array(
+        Type.Object({
+          name: Type.String(),
+          age: Type.Number(),
+        })
+      ),
     },
-  }),
-  getToken: createRouteDefinition({
-    method: "GET",
-    url: `/token`,
-    schema: {
-      querystring: Type.Object({ size: Type.String() }),
-      response: {
-        200: Type.String(),
-      },
-    },
-  }),
-  createUser: createRouteDefinition({
-    method: "POST",
-    url: `/user`,
-    schema: {
-      body: Type.Object({ name: Type.String() }),
-      response: {
-        200: Type.String(),
-      },
-    },
-  }),
-};
+  },
+}).handle(() => {});
 
-const [createClient, schema] = loadRouteDefinitions(routeDefinitions);
+const getToken = createRoute("/token", {
+  method: "GET",
+  schema: {
+    querystring: Type.Object({ size: Type.String() }),
+    response: {
+      200: Type.String(),
+    },
+  },
+}).handle(() => {});
+
+const createUser = createRoute("/user", {
+  method: "POST",
+  schema: {
+    body: Type.Object({ name: Type.String() }),
+    response: {
+      200: Type.String(),
+    },
+  },
+}).handle(() => {});
+
+const routes = { ...getUser, ...getToken, ...createUser };
+
+type Router = typeof routes;
+
+const client = createClient<Router>({} as any);
 
 describe("Check requests parameters and response", () => {
   it("it should correctly call axios.request for a GET query with query parameters", async () => {
     const request = jest.fn((params) => {
       return { data: { name: "John Doe" } };
     });
-    const client = createClient({ request, getUri: () => "" } as any);
-    const user = await client.getUser({ params: { id: "toto" } }).call();
+    const client = createClient<Router>({
+      instance: { request, getUri: () => "/user/toto" },
+    } as any);
+
+    const user = await client
+      .get("/user/:id", { params: { id: "toto" } })
+      .call();
+
+    const url = await client.get("/user/:id", { params: { id: "toto" } }).url;
 
     expect(request.mock.calls?.[0]?.[0]).toMatchObject({
       url: "/user/toto",
       method: "GET",
     });
+    expect(url).toBe("/user/toto");
     expect(user).toMatchObject({ name: "John Doe" });
   });
 
@@ -62,9 +71,11 @@ describe("Check requests parameters and response", () => {
     const request = jest.fn((params) => {
       return { data: "my-token" };
     });
-    const client = createClient({ request, getUri: () => "" } as any);
+    const client = createClient<Router>({
+      instance: { request, getUri: () => "" },
+    } as any);
 
-    const token = await client.getToken({ query: { size: "20" } }).call();
+    const token = await client.get("/token", { query: { size: "20" } }).call();
 
     expect(request.mock.calls?.[0]?.[0]).toMatchObject({
       url: "/token",
@@ -78,9 +89,13 @@ describe("Check requests parameters and response", () => {
     const request = jest.fn((params) => {
       return { data: { name: "John Doe" } };
     });
-    const client = createClient({ request, getUri: () => "" } as any);
+    const client = createClient<Router>({
+      instance: { request, getUri: () => "" },
+    } as any);
 
-    const user = await client.createUser({ body: { name: "John Doe" } }).call();
+    const user = await client
+      .post("/user", { body: { name: "John Doe" } })
+      .call();
 
     expect(request.mock.calls?.[0]?.[0]).toMatchObject({
       url: "/user",

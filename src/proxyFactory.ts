@@ -1,12 +1,12 @@
-import { AxiosInstance } from "axios";
+import { AxiosInstance, AxiosRequestConfig } from "axios";
 import {
-  RouteClient,
+  Args,
   createClientMethod,
   createRouteDefinition,
+  RouteClient,
+  OkResponse,
 } from "./clientFactory";
 import { RouteDefinition, Schema } from "./types";
-import { z } from "zod";
-import { Type } from "@sinclair/typebox";
 
 const methods = [
   "GET",
@@ -21,19 +21,6 @@ const methods = [
   "SEARCH",
 ] as const;
 
-const parseRouteName = (name: string) => {
-  const method = methods.find((item) =>
-    name.startsWith(item.toLocaleLowerCase())
-  );
-
-  if (!method) throw "wrong method";
-
-  const url = name
-    .replace(method.toLowerCase(), "")
-    .replace(/[A-Z]/g, (letter) => `/${letter.toLowerCase()}`);
-  return { method, url } as const;
-};
-
 export const createClient = <
   Definitions extends {
     [K in keyof Definitions]: RouteDefinition;
@@ -42,41 +29,74 @@ export const createClient = <
   instance,
 }: {
   instance: AxiosInstance;
-}): {
-  [K in keyof Definitions]: RouteClient<Definitions[K]>;
-} => {
+}) => {
+  type DefinitionsByMethod = {
+    [M in (typeof methods)[number]]: {
+      [V in keyof Definitions as V extends `[${M}]${infer S}`
+        ? S
+        : never]: Definitions[V];
+    };
+  };
+
   return new Proxy(
     {},
     {
-      get: (_, name: string) => {
-        const parsed = parseRouteName(name);
-        return createClientMethod({ ...parsed, instance });
+      get: (_, method: string) => {
+        return (url: string, args: Args<Schema>, config: AxiosRequestConfig) =>
+          createClientMethod({
+            url,
+            method: method.toUpperCase(),
+            instance,
+            args,
+            config,
+          });
       },
     }
   ) as {
-    [K in keyof Definitions]: RouteClient<Definitions[K]>;
+    [M in keyof DefinitionsByMethod as Lowercase<M>]: <
+      URL extends keyof MethodDefinitions,
+      MethodDefinitions = DefinitionsByMethod[M],
+      R = URL extends keyof MethodDefinitions ? MethodDefinitions[URL] : never
+    >(
+      url: URL,
+      args: R extends RouteDefinition ? Args<R["schema"]> : never,
+      config?: AxiosRequestConfig
+    ) => R extends RouteDefinition ? RouteClient<R> : never;
   };
 };
 
 export const createRoute = <
-  const N extends string,
-  const D extends { schema: Schema; okCode?: number }
+  const URL extends string,
+  const D extends {
+    schema: Schema;
+    okCode?: number;
+    method: (typeof methods)[number];
+  }
 >(
-  name: N,
+  url: URL,
   options: D
 ) => {
   return {
     handle: (
       callback: (args: {
         method: (typeof methods)[number];
-        url: string;
+        url: URL;
         schema: D["schema"];
       }) => void
     ) => {
-      const parsed = parseRouteName(name);
-      callback({ ...parsed, schema: options.schema });
-      const routeDef = createRouteDefinition({ ...parsed, ...options });
-      return { [name]: routeDef } as { [k in N]: typeof routeDef };
+      callback({
+        url,
+        method: options.method,
+        schema: options.schema,
+      });
+      const routeDef = createRouteDefinition({
+        url,
+        ...options,
+      });
+      const key = `${options.method}/${url}` as `${D["method"]}${URL}`;
+      return { [key]: routeDef } as {
+        [k in `[${D["method"]}]${URL}`]: typeof routeDef;
+      };
     },
   };
 };
