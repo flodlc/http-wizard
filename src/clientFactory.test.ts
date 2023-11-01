@@ -54,10 +54,11 @@ describe("Check requests parameters and response", () => {
     } as any);
 
     const user = await client
-      .get("/user/:id", { params: { id: "toto" } })
+      .route("[GET]/user/:id", { params: { id: "toto" } })
       .call();
 
-    const url = await client.get("/user/:id", { params: { id: "toto" } }).url;
+    const url = await client.route("[GET]/user/:id", { params: { id: "toto" } })
+      .url;
 
     expect(request.mock.calls?.[0]?.[0]).toMatchObject({
       url: "/user/toto",
@@ -75,7 +76,9 @@ describe("Check requests parameters and response", () => {
       instance: { request, getUri: () => "" },
     } as any);
 
-    const token = await client.get("/token", { query: { size: "20" } }).call();
+    const token = await client
+      .route("[GET]/token", { query: { size: "20" } })
+      .call();
 
     expect(request.mock.calls?.[0]?.[0]).toMatchObject({
       url: "/token",
@@ -94,7 +97,7 @@ describe("Check requests parameters and response", () => {
     } as any);
 
     const user = await client
-      .post("/user", { body: { name: "John Doe" } })
+      .route("[POST]/user", { body: { name: "John Doe" } })
       .call();
 
     expect(request.mock.calls?.[0]?.[0]).toMatchObject({

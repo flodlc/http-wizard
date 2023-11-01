@@ -13,9 +13,9 @@ type Router = typeof router;
 
 const client = createClient<Router>({} as any);
 
-const user = client.get("/user", { params: { id: "sdf" } }).call();
-const user = client.get("/user/rd", {}).call();
+const user = client.route("[GET]/user", { params: { id: "sdf" } }).call();
+const user = client.route("[GET]/user/rd", {}).call();
 
 const dog = client
-  .post("/pet", { params: { idff: "sdfd" } }, { headers: {} })
+  .route("[POST]/pet", { params: { idff: "sdfd" } }, { headers: {} })
   .call();

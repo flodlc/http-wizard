@@ -1,5 +1,16 @@
 import { Static, TSchema } from "@sinclair/typebox";
 
+export type ArgsFromTB<S extends SchemaTypeBox> =
+  (BodyFromSchemaTypeBox<S> extends undefined
+    ? { body?: undefined }
+    : { body: BodyFromSchemaTypeBox<S> }) &
+    (QueryFromSchemaTypeBox<S> extends undefined
+      ? { query?: undefined }
+      : { query: QueryFromSchemaTypeBox<S> }) &
+    (ParamsFromSchemaTypeBox<S> extends undefined
+      ? { params?: undefined }
+      : { params: ParamsFromSchemaTypeBox<S> });
+
 export type SchemaTypeBox = {
   params?: TSchema;
   querystring?: TSchema;

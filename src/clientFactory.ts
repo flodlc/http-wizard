@@ -1,46 +1,17 @@
 import { AxiosInstance, AxiosRequestConfig } from "axios";
 import {
-  BodyFromSchemaTypeBox,
-  ParamsFromSchemaTypeBox,
-  QueryFromSchemaTypeBox,
+  ArgsFromTB,
   ResponseFromSchemaTypeBox,
   SchemaTypeBox,
 } from "./TypeboxAdapter";
-import {
-  BodyFromSchemaZod,
-  ParamsFromSchemaZod,
-  QueryFromSchemaZod,
-  ResponseFromSchemaZod,
-  SchemaZod,
-} from "./ZodAdapter";
+import { ArgsFromZod, ResponseFromSchemaZod, SchemaZod } from "./ZodAdapter";
 import { RouteDefinition, Simplify, Schema } from "./types";
-
-type ArgsFromTB<S extends SchemaTypeBox> =
-  (BodyFromSchemaTypeBox<S> extends undefined
-    ? { body?: undefined }
-    : { body: BodyFromSchemaTypeBox<S> }) &
-    (QueryFromSchemaTypeBox<S> extends undefined
-      ? { query?: undefined }
-      : { query: QueryFromSchemaTypeBox<S> }) &
-    (ParamsFromSchemaTypeBox<S> extends undefined
-      ? { params?: undefined }
-      : { params: ParamsFromSchemaTypeBox<S> });
 
 type Empty<O extends Object> = O[keyof O] extends undefined | never
   ? true
   : false;
 
 type NeverIfEmpty<O extends Object> = Empty<O> extends true ? {} : O;
-
-type ArgsFromZod<S extends SchemaZod> = (BodyFromSchemaZod<S> extends undefined
-  ? { body?: never }
-  : { body: BodyFromSchemaZod<S> }) &
-  (QueryFromSchemaZod<S> extends undefined
-    ? { query?: never }
-    : { query: QueryFromSchemaZod<S> }) &
-  (ParamsFromSchemaZod<S> extends undefined
-    ? { params?: never }
-    : { params: ParamsFromSchemaZod<S> });
 
 export type Args<S extends Schema> = S extends SchemaTypeBox
   ? ArgsFromTB<S>
@@ -57,7 +28,7 @@ export type Response<
   ? ResponseFromSchemaZod<S, OK>
   : unknown;
 
-export const callApi = async <S extends Schema>({
+export const callApi = async <D extends RouteDefinition>({
   config,
   method,
   url,
@@ -68,7 +39,7 @@ export const callApi = async <S extends Schema>({
   url: string;
   config?: AxiosRequestConfig;
   instance: AxiosInstance;
-} & Args<S>) => {
+} & Args<D["schema"]>) => {
   const { data } = await instance.request({
     method,
     url,
@@ -76,10 +47,10 @@ export const callApi = async <S extends Schema>({
     params: "query" in props ? props.query : undefined,
     data: "body" in props ? props.body : undefined,
   });
-  return data as Response<S>;
+  return data as OkResponse<D>;
 };
 
-export const createClientMethod = <S extends Schema>({
+export const createClientMethod = <D extends RouteDefinition>({
   method,
   url,
   instance,
@@ -89,9 +60,9 @@ export const createClientMethod = <S extends Schema>({
   method: AxiosRequestConfig["method"];
   url: string;
   instance: AxiosInstance;
-  args: Args<S>;
+  args: Args<D["schema"]>;
   config?: AxiosRequestConfig;
-}) => {
+}): RouteClient<D> => {
   const processedUrl = Object.entries(
     ("params" in args ? args?.params : undefined) ?? {}
   ).reduce(
@@ -101,7 +72,7 @@ export const createClientMethod = <S extends Schema>({
   );
   return {
     call: () =>
-      callApi<S>({
+      callApi<D>({
         method,
         url: processedUrl,
         config,

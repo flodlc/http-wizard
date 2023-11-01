@@ -30,34 +30,20 @@ export const createClient = <
 }: {
   instance: AxiosInstance;
 }) => {
-  type DefinitionsByMethod = {
-    [M in (typeof methods)[number]]: {
-      [V in keyof Definitions as V extends `[${M}]${infer S}`
-        ? S
-        : never]: Definitions[V];
-    };
-  };
-
-  return new Proxy(
-    {},
-    {
-      get: (_, method: string) => {
-        return (url: string, args: Args<Schema>, config: AxiosRequestConfig) =>
-          createClientMethod({
-            url,
-            method: method.toUpperCase(),
-            instance,
-            args,
-            config,
-          });
-      },
-    }
-  ) as {
-    [M in keyof DefinitionsByMethod as Lowercase<M>]: <
-      URL extends keyof MethodDefinitions,
-      MethodDefinitions = DefinitionsByMethod[M],
-      R = URL extends keyof MethodDefinitions ? MethodDefinitions[URL] : never
-    >(
+  return {
+    route: (url: string, args: Args<Schema>, config: AxiosRequestConfig) => {
+      const method = url.split("]")[0].replace("[", "");
+      const shortUrl = url.split("]").slice(1).join("]");
+      return createClientMethod({
+        url: shortUrl,
+        method,
+        instance,
+        args,
+        config,
+      });
+    },
+  } as unknown as {
+    route: <URL extends keyof Definitions, R = Definitions[URL]>(
       url: URL,
       args: R extends RouteDefinition ? Args<R["schema"]> : never,
       config?: AxiosRequestConfig

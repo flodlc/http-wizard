@@ -1,5 +1,16 @@
 import { z } from "zod";
 
+export type ArgsFromZod<S extends SchemaZod> =
+  (BodyFromSchemaZod<S> extends undefined
+    ? { body?: never }
+    : { body: BodyFromSchemaZod<S> }) &
+    (QueryFromSchemaZod<S> extends undefined
+      ? { query?: never }
+      : { query: QueryFromSchemaZod<S> }) &
+    (ParamsFromSchemaZod<S> extends undefined
+      ? { params?: never }
+      : { params: ParamsFromSchemaZod<S> });
+
 export type SchemaZod = {
   params?: z.AnyZodObject;
   querystring?: z.AnyZodObject;
