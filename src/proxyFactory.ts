@@ -48,6 +48,7 @@ export const createClient = <
       args: R extends RouteDefinition ? Args<R["schema"]> : never,
       config?: AxiosRequestConfig
     ) => R extends RouteDefinition ? RouteClient<R> : never;
+    infer: { [URL in keyof Definitions]: OkResponse<Definitions[URL]> };
   };
 };
 

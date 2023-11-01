@@ -102,3 +102,7 @@ export type RouteClient<D extends RouteDefinition> = {
 export const createRouteDefinition = <const R extends RouteDefinition>(
   routeDefinition: R
 ) => routeDefinition;
+
+export type InferResponse<
+  CALL extends (...args: any) => { call: () => Promise<any> }
+> = Awaited<ReturnType<ReturnType<CALL>["call"]>>;
