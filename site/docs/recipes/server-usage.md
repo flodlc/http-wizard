@@ -13,6 +13,11 @@ basic exemple of route definition:
 // server/getUserById.ts
 import { createRoute, z } from "http-wizard";
 
+const User = z.object({
+  id: z.string(),
+  name: z.string(),
+});
+
 export const getUserById = (fastify: FastifyInstance) => {
   return createRoute("get/user/:id", {
     schema: {
@@ -20,12 +25,7 @@ export const getUserById = (fastify: FastifyInstance) => {
         id: z.string(),
       }),
       response: {
-        200: z.array(
-          z.object({
-            id: z.string(),
-            name: z.string(),
-          })
-        ),
+        200: z.array(User),
       },
     },
   }).handle((props) => {
@@ -72,13 +72,18 @@ The property `okCode` allows inferring the response type from a given response c
 // server/getUserById.ts
 import { createRoute, z } from "http-wizard";
 
+const User = z.object({
+  id: z.string(),
+  name: z.string(),
+});
+
 export const getUserById = (fastify: FastifyInstance) => {
   return createRoute("/user/:id", {
     method: "GET",
     okCode: 201,
     schema: {
       response: {
-        201: z.object({ name: z.string() }),
+        201: User,
       },
     },
   }).handle((props) => {

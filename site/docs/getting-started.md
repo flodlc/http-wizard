@@ -25,17 +25,17 @@ Let's first create a route on the server:
 // server.ts
 import { createRoute, z } from "http-wizard";
 
+const User = z.object({
+  id: z.string(),
+  name: z.string(),
+});
+
 export const getUsers = (fastify: FastifyInstance) => {
   return createRoute("/users", {
     method: "GET",
     schema: {
       response: {
-        200: z.array(
-          z.object({
-            id: z.string(),
-            name: z.string(),
-          })
-        ),
+        200: z.array(User),
       },
     },
   }).handle((props) => {
