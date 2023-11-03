@@ -18,7 +18,7 @@ const User = z.object({
   name: z.string(),
 });
 
-export const getUserById = (fastify: FastifyInstance) => {
+export const getUserByIdRoute = (fastify: FastifyInstance) => {
   return createRoute("get/user/:id", {
     schema: {
       params: z.object({
@@ -54,7 +54,7 @@ Let's create and export the Router type !
 
 import { getUserById } from "./getUserById.ts";
 
-const router = { ...getUserById() };
+const router = { ...getUserByIdRoute() };
 export type Router = typeof router;
 ```
 
@@ -77,7 +77,7 @@ const User = z.object({
   name: z.string(),
 });
 
-export const getUserById = (fastify: FastifyInstance) => {
+export const getUserByIdRoute = (fastify: FastifyInstance) => {
   return createRoute("/user/:id", {
     method: "GET",
     okCode: 201,
