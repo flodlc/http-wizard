@@ -71,7 +71,7 @@ export const createClientMethod = <D extends RouteDefinition>({
     url
   );
   return {
-    call: () =>
+    query: () =>
       callApi<D>({
         method,
         url: processedUrl,
@@ -95,7 +95,7 @@ export type OkResponse<D extends RouteDefinition> = Simplify<
 >;
 
 export type RouteClient<D extends RouteDefinition> = {
-  call: () => Promise<OkResponse<D>>;
+  query: () => Promise<OkResponse<D>>;
   url: string;
 };
 
@@ -104,5 +104,5 @@ export const createRouteDefinition = <const R extends RouteDefinition>(
 ) => routeDefinition;
 
 export type InferResponse<
-  CALL extends (...args: any) => { call: () => Promise<any> }
-> = Awaited<ReturnType<ReturnType<CALL>["call"]>>;
+  CALL extends (...args: any) => { query: () => Promise<any> }
+> = Awaited<ReturnType<ReturnType<CALL>["query"]>>;

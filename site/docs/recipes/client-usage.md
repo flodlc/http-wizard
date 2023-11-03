@@ -27,7 +27,7 @@ import { apiClient } from "./apiClient";
 
 const user = await apiClient
   .route("[GET]/user/:id", { params: { id: "1" } })
-  .call();
+  .query();
 // user is safe: { id:string, name:string }
 ```
 

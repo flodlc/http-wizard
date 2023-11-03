@@ -55,7 +55,7 @@ describe("Check requests parameters and response", () => {
 
     const user = await client
       .route("[GET]/user/:id", { params: { id: "toto" } })
-      .call();
+      .query();
 
     const url = await client.route("[GET]/user/:id", { params: { id: "toto" } })
       .url;
@@ -78,7 +78,7 @@ describe("Check requests parameters and response", () => {
 
     const token = await client
       .route("[GET]/token", { query: { size: "20" } })
-      .call();
+      .query();
 
     expect(request.mock.calls?.[0]?.[0]).toMatchObject({
       url: "/token",
@@ -98,7 +98,7 @@ describe("Check requests parameters and response", () => {
 
     const user = await client
       .route("[POST]/user", { body: { name: "John Doe" } })
-      .call();
+      .query();
 
     expect(request.mock.calls?.[0]?.[0]).toMatchObject({
       url: "/user",
