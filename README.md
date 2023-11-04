@@ -12,7 +12,7 @@ It's fully compliant with HTTP standards and facilitates the easy usage of your 
 
 #### Here is an exemple of usage
 
-https://github.com/flodlc/http-wizard/raw/master/site/static/video.mov
+https://github.com/flodlc/http-wizard/assets/3781663/71c749f0-3493-4865-8a9a-41421a371a05
 
 ### What it can do:
 
