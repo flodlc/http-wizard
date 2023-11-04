@@ -12,7 +12,7 @@ It's fully compliant with HTTP standards and facilitates the easy usage of your 
 
 #### Here is an exemple of usage
 
-https://http-wizard.vercel.app/video.mov
+https://github.com/flodlc/http-wizard/raw/master/site/static/video.mov
 
 ### What it can do:
 
