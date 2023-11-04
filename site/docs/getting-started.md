@@ -9,9 +9,9 @@ sidebar_position: 2
 To get started, install http-wizard using npm or yarn:
 
 ```bash title="command"
-npm install http-wizard
+npm install http-wizard zod
 # or
-yarn add http-wizard
+yarn add http-wizard zod
 ```
 
 ## How it works ?
