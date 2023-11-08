@@ -985,10 +985,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sinclair/typebox@npm:^0.28.14":
-  version: 0.28.14
-  resolution: "@sinclair/typebox@npm:0.28.14"
-  checksum: daf1cd6b9fefe42f60041f36006d6068db57830444f5385b0d5c374f710362c084d19f8af2e0d7690770eb20643938a062143472f01331d292db9af4c8963f21
+"@sinclair/typebox@npm:^0.31.23":
+  version: 0.31.23
+  resolution: "@sinclair/typebox@npm:0.31.23"
+  checksum: 5c8e54dc17c815e68e08385336e02bb76d3bdc3a3b60cb3930f2a78d1779e01c4fcec59c4d297c471f30ca33310502ed976ed3eed8f7e0f3c36228c36e69c1ad
   languageName: node
   linkType: hard
 
@@ -1007,6 +1007,31 @@ __metadata:
   dependencies:
     "@sinonjs/commons": ^3.0.0
   checksum: 614d30cb4d5201550c940945d44c9e0b6d64a888ff2cd5b357f95ad6721070d6b8839cd10e15b76bf5e14af0bcc1d8f9ec00d49a46318f1f669a4bec1d7f3148
+  languageName: node
+  linkType: hard
+
+"@tanstack/query-core@npm:5.8.1":
+  version: 5.8.1
+  resolution: "@tanstack/query-core@npm:5.8.1"
+  checksum: b2b4cc0e31eabb2b59297f9b90e3bb1eec9c23c156a9dad12f230e6ba12478bd34fcc9a37db9df3e74ef4241ea9feede807920963bdeaf5b6b72c3bf93576107
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-query@npm:^5.8.1":
+  version: 5.8.1
+  resolution: "@tanstack/react-query@npm:5.8.1"
+  dependencies:
+    "@tanstack/query-core": 5.8.1
+  peerDependencies:
+    react: ^18.0.0
+    react-dom: ^18.0.0
+    react-native: "*"
+  peerDependenciesMeta:
+    react-dom:
+      optional: true
+    react-native:
+      optional: true
+  checksum: 0ab9591f05810baa454f61d8ca3c451ad1087a8d33e2268e6f91f75b1096d7d265110806d78361c512f327884f93dab9a54fcb7a0dd2b54afcf34c8e6dc60616
   languageName: node
   linkType: hard
 
@@ -2727,7 +2752,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "http-wizard@workspace:."
   dependencies:
-    "@sinclair/typebox": ^0.28.14
+    "@sinclair/typebox": ^0.31.23
+    "@tanstack/react-query": ^5.8.1
     "@types/jest": ^29.5.2
     "@types/node": ^18.7.16
     axios: ^1.4.0
@@ -2738,7 +2764,7 @@ __metadata:
     typescript: ^5.0.4
     zod: ^3.22.4
   peerDependencies:
-    "@sinclair/typebox": ^0.28.14
+    "@sinclair/typebox": ^0.29.0
     axios: ^1.4.0
     zod: 3.x
   languageName: unknown

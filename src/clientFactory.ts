@@ -5,7 +5,7 @@ import {
   SchemaTypeBox,
 } from "./TypeboxAdapter";
 import { ArgsFromZod, ResponseFromSchemaZod, SchemaZod } from "./ZodAdapter";
-import { RouteDefinition, Simplify, Schema } from "./types";
+import { RouteDefinition, Simplify, Schema, DrainOuterGeneric } from "./types";
 
 type Empty<O extends Object> = O[keyof O] extends undefined | never
   ? true
@@ -48,10 +48,9 @@ export const createRouteUri = <D extends RouteDefinition>({
   args: Args<D["schema"]>;
   config?: AxiosRequestConfig;
 }): string => {
-  const processedUrl = processUrl(url, args);
   return instance.getUri({
     method,
-    url: processedUrl,
+    url: processUrl(url, args),
     params: args?.query,
     data: args?.body,
     ...config,
@@ -59,7 +58,7 @@ export const createRouteUri = <D extends RouteDefinition>({
   });
 };
 
-export const createClientQuery = async <D extends RouteDefinition>({
+export const query = async <D extends RouteDefinition>({
   method,
   url,
   instance,
@@ -74,16 +73,19 @@ export const createClientQuery = async <D extends RouteDefinition>({
 }): Promise<OkResponse<D>> => {
   const { data } = await instance.request({
     method,
-    url,
+    url: processUrl(url, args),
     ...config,
     params: "query" in args ? args.query : undefined,
     data: "body" in args ? args.body : undefined,
   });
-  return data as OkResponse<D>;
+
+  return data;
 };
 
 export type OkResponse<D extends RouteDefinition> = Simplify<
-  Response<D["schema"], D["okCode"] extends number ? D["okCode"] : 200>
+  DrainOuterGeneric<
+    Response<D["schema"], D["okCode"] extends number ? D["okCode"] : 200>
+  >
 >;
 
 export const createRouteDefinition = <const R extends RouteDefinition>(

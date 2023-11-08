@@ -4,9 +4,11 @@ import {
   createRouteDefinition,
   OkResponse,
   createRouteUri,
-  createClientQuery,
+  query,
 } from "./clientFactory";
-import { RouteDefinition, Schema } from "./types";
+import { DrainOuterGeneric, RouteDefinition, Schema } from "./types";
+import { QueryClient, useQuery } from "@tanstack/react-query";
+import { Type } from "@sinclair/typebox";
 
 const methods = [
   "GET",
@@ -22,23 +24,23 @@ const methods = [
 ] as const;
 
 export const createClient = <
-  Definitions extends {
-    [K in keyof Definitions]: RouteDefinition;
-  }
+  Definitions extends Record<string, RouteDefinition>
 >({
   instance,
 }: {
   instance: AxiosInstance;
 }) => {
   return {
-    query: <URL extends keyof Definitions>(
-      url: string,
-      args: Args<Definitions[URL]["schema"]>,
-      config: AxiosRequestConfig
+    url: <URL extends keyof Definitions & string, R = Definitions[URL]>(
+      url: URL,
+      args: R extends RouteDefinition
+        ? Args<DrainOuterGeneric<R["schema"]>>
+        : never,
+      config?: AxiosRequestConfig
     ) => {
       const method = url.split("]")[0].replace("[", "");
       const shortUrl = url.split("]").slice(1).join("]");
-      return createClientQuery({
+      return createRouteUri<Definitions[URL]>({
         url: shortUrl,
         method,
         instance,
@@ -46,14 +48,14 @@ export const createClient = <
         config,
       });
     },
-    url: <URL extends keyof Definitions>(
-      url: string,
-      args: Args<Definitions[URL]["schema"]>,
-      config: AxiosRequestConfig
+    query: <URL extends keyof Definitions & string>(
+      url: URL,
+      args: Args<DrainOuterGeneric<Definitions[URL]["schema"]>>,
+      config?: AxiosRequestConfig
     ) => {
       const method = url.split("]")[0].replace("[", "");
       const shortUrl = url.split("]").slice(1).join("]");
-      return createRouteUri({
+      return query<Definitions[URL]>({
         url: shortUrl,
         method,
         instance,
@@ -61,19 +63,9 @@ export const createClient = <
         config,
       });
     },
-    infer: undefined as unknown,
-  } as {
-    url: <URL extends keyof Definitions, R = Definitions[URL]>(
-      url: URL,
-      args: R extends RouteDefinition ? Args<R["schema"]> : never,
-      config?: AxiosRequestConfig
-    ) => string;
-    query: <URL extends keyof Definitions, R = Definitions[URL]>(
-      url: URL,
-      args: R extends RouteDefinition ? Args<R["schema"]> : never,
-      config?: AxiosRequestConfig
-    ) => R extends RouteDefinition ? Promise<OkResponse<R>> : never;
-    infer: { [URL in keyof Definitions]: OkResponse<Definitions[URL]> };
+    infer: undefined as unknown as {
+      [URL in keyof Definitions]: OkResponse<Definitions[URL]>;
+    },
   };
 };
 
@@ -111,14 +103,4 @@ export const createRoute = <
       };
     },
   };
-};
-
-export const createRouter = <
-  const Definitions extends {
-    [K in keyof Definitions]: RouteDefinition;
-  }
->(
-  routes: Definitions
-): Definitions => {
-  return routes;
 };

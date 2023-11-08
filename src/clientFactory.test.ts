@@ -1,6 +1,20 @@
 import { Type } from "@sinclair/typebox";
 import { createClient, createRoute } from "./proxyFactory";
 
+const getEasy = createRoute("/easy", {
+  method: "GET",
+  schema: {
+    response: {
+      200: Type.Array(
+        Type.Object({
+          name: Type.String(),
+          age: Type.Number(),
+        })
+      ),
+    },
+  },
+}).handle(() => {});
+
 const getUser = createRoute("/user/:id", {
   method: "GET",
   schema: {
@@ -38,7 +52,7 @@ const createUser = createRoute("/user", {
   },
 }).handle(() => {});
 
-const routes = { ...getUser, ...getToken, ...createUser };
+const routes = { ...getUser, ...getToken, ...createUser, ...getEasy };
 
 type Router = typeof routes;
 

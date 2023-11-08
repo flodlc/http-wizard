@@ -4,9 +4,9 @@ export type ArgsFromTB<S extends SchemaTypeBox> =
   (BodyFromSchemaTypeBox<S> extends undefined
     ? { body?: undefined }
     : { body: BodyFromSchemaTypeBox<S> }) &
-    (QueryFromSchemaTypeBox<S> extends undefined
-      ? { query?: undefined }
-      : { query: QueryFromSchemaTypeBox<S> }) &
+    (S["querystring"] extends TSchema
+      ? { query: Static<S["querystring"]> }
+      : { query?: undefined }) &
     (ParamsFromSchemaTypeBox<S> extends undefined
       ? { params?: undefined }
       : { params: ParamsFromSchemaTypeBox<S> });
@@ -24,11 +24,8 @@ export type ParamsFromSchemaTypeBox<S extends SchemaTypeBox> = S extends {
   ? Static<S["params"]>
   : undefined;
 
-export type QueryFromSchemaTypeBox<S extends SchemaTypeBox> = S extends {
-  querystring: TSchema;
-}
-  ? Static<S["querystring"]>
-  : undefined;
+export type QueryFromSchemaTypeBox<S extends TSchema | undefined> =
+  S extends TSchema ? { query: Static<S> } : { query?: undefined };
 
 export type BodyFromSchemaTypeBox<S extends SchemaTypeBox> = S extends {
   body: TSchema;

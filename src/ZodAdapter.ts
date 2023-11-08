@@ -1,15 +1,8 @@
 import { z } from "zod";
 
-export type ArgsFromZod<S extends SchemaZod> =
-  (BodyFromSchemaZod<S> extends undefined
-    ? { body?: never }
-    : { body: BodyFromSchemaZod<S> }) &
-    (QueryFromSchemaZod<S> extends undefined
-      ? { query?: never }
-      : { query: QueryFromSchemaZod<S> }) &
-    (ParamsFromSchemaZod<S> extends undefined
-      ? { params?: never }
-      : { params: ParamsFromSchemaZod<S> });
+export type ArgsFromZod<S extends SchemaZod> = BodyFromSchemaZod<S> &
+  QueryFromSchemaZod<S> &
+  ParamsFromSchemaZod<S>;
 
 export type SchemaZod = {
   params?: z.AnyZodObject;
@@ -20,20 +13,20 @@ export type SchemaZod = {
 export type ParamsFromSchemaZod<S extends SchemaZod> = S extends {
   params: z.AnyZodObject;
 }
-  ? z.infer<S["params"]>
-  : undefined;
+  ? { params: z.infer<S["params"]> }
+  : { params?: never };
 
 export type QueryFromSchemaZod<S extends SchemaZod> = S extends {
   querystring: z.AnyZodObject;
 }
-  ? z.infer<S["querystring"]>
-  : undefined;
+  ? { query: z.infer<S["querystring"]> }
+  : { query?: never };
 
 export type BodyFromSchemaZod<S extends SchemaZod> = S extends {
   body: z.Schema;
 }
-  ? z.infer<S["body"]>
-  : undefined;
+  ? { body: z.infer<S["body"]> }
+  : { body?: never };
 
 export type ResponseFromSchemaZod<
   S extends SchemaZod,
