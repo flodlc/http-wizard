@@ -7,8 +7,7 @@
 
 ## Introduction
 
-Http-wizard is a type safe api-client designed to streamline the development of your application.  
-It's fully compliant with HTTP standards and facilitates the easy usage of your API with non ts/js clients.
+Http-wizard weaves TypeScript magic, offering a type-safe API client and ensuring a delightful end-to-end developer experience. ✨
 
 #### Here is an exemple of usage
 

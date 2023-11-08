@@ -8,7 +8,7 @@ const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 const config = {
   title: "Http-wizard",
   tagline:
-    "Http-wizard is a type safe api-client designed to streamline the development of your application. It's fully compliant with HTTP standards and facilitates the easy usage of your API with non ts/js clients.",
+    "Http-wizard weaves TypeScript magic, offering a type-safe API client and ensuring a delightful end-to-end developer experience. ✨",
   favicon: "img/favicon.ico",
 
   // Set the production url of your site here

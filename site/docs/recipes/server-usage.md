@@ -4,6 +4,7 @@ sidebar_position: 1
 
 # Usage on the server
 
+Http-wizard is made for Fastify but can be used with all node servers through custom adapters.  
 On the server, http-wizard is mainly used to link the route validation schemas with the exported `Router` type.  
 `Router` type is what allows the typesafety on the client side.
 
