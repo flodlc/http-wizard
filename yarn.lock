@@ -2765,6 +2765,7 @@ __metadata:
     zod: ^3.22.4
   peerDependencies:
     "@sinclair/typebox": ^0.29.0
+    "@tanstack/react-query": ^5.8.1
     axios: ^1.4.0
     zod: 3.x
   languageName: unknown
