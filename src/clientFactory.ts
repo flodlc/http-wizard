@@ -28,29 +28,14 @@ export type Response<
   ? ResponseFromSchemaZod<S, OK>
   : unknown;
 
-export const callApi = async <D extends RouteDefinition>({
-  config,
-  method,
-  url,
-  instance,
-  ...props
-}: {
-  method: AxiosRequestConfig["method"];
-  url: string;
-  config?: AxiosRequestConfig;
-  instance: AxiosInstance;
-} & Args<D["schema"]>) => {
-  const { data } = await instance.request({
-    method,
-    url,
-    ...config,
-    params: "query" in props ? props.query : undefined,
-    data: "body" in props ? props.body : undefined,
-  });
-  return data as OkResponse<D>;
-};
+const processUrl = (url: string, args: object) =>
+  Object.entries(("params" in args ? args?.params : undefined) ?? {}).reduce(
+    (acc, [key, value]) =>
+      acc.replace(new RegExp(`:${key}`, "g"), value as string),
+    url
+  );
 
-export const createClientMethod = <D extends RouteDefinition>({
+export const createRouteUri = <D extends RouteDefinition>({
   method,
   url,
   instance,
@@ -62,47 +47,45 @@ export const createClientMethod = <D extends RouteDefinition>({
   instance: AxiosInstance;
   args: Args<D["schema"]>;
   config?: AxiosRequestConfig;
-}): RouteClient<D> => {
-  const processedUrl = Object.entries(
-    ("params" in args ? args?.params : undefined) ?? {}
-  ).reduce(
-    (acc, [key, value]) =>
-      acc.replace(new RegExp(`:${key}`, "g"), value as string),
-    url
-  );
-  return {
-    query: () =>
-      callApi<D>({
-        method,
-        url: processedUrl,
-        config,
-        instance,
-        ...args,
-      }),
-    url: instance.getUri({
-      method,
-      url: processedUrl,
-      params: args?.query,
-      data: args?.body,
-      ...config,
-      ...args,
-    }),
-  };
+}): string => {
+  const processedUrl = processUrl(url, args);
+  return instance.getUri({
+    method,
+    url: processedUrl,
+    params: args?.query,
+    data: args?.body,
+    ...config,
+    ...args,
+  });
+};
+
+export const createClientQuery = async <D extends RouteDefinition>({
+  method,
+  url,
+  instance,
+  args,
+  config,
+}: {
+  method: AxiosRequestConfig["method"];
+  url: string;
+  instance: AxiosInstance;
+  args: Args<D["schema"]>;
+  config?: AxiosRequestConfig;
+}): Promise<OkResponse<D>> => {
+  const { data } = await instance.request({
+    method,
+    url,
+    ...config,
+    params: "query" in args ? args.query : undefined,
+    data: "body" in args ? args.body : undefined,
+  });
+  return data as OkResponse<D>;
 };
 
 export type OkResponse<D extends RouteDefinition> = Simplify<
   Response<D["schema"], D["okCode"] extends number ? D["okCode"] : 200>
 >;
 
-export type RouteClient<D extends RouteDefinition> = {
-  query: () => Promise<OkResponse<D>>;
-  url: string;
-};
-
 export const createRouteDefinition = <const R extends RouteDefinition>(
   routeDefinition: R
 ) => routeDefinition;
-
-export type InferResponse<
-  CALL extends (...args: any) => { query: () => Promise<any> }
-> = Awaited<ReturnType<ReturnType<CALL>["query"]>>;

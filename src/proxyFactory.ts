@@ -1,10 +1,10 @@
 import { AxiosInstance, AxiosRequestConfig } from "axios";
 import {
   Args,
-  createClientMethod,
   createRouteDefinition,
-  RouteClient,
   OkResponse,
+  createRouteUri,
+  createClientQuery,
 } from "./clientFactory";
 import { RouteDefinition, Schema } from "./types";
 
@@ -31,10 +31,14 @@ export const createClient = <
   instance: AxiosInstance;
 }) => {
   return {
-    route: (url: string, args: Args<Schema>, config: AxiosRequestConfig) => {
+    query: <URL extends keyof Definitions>(
+      url: string,
+      args: Args<Definitions[URL]["schema"]>,
+      config: AxiosRequestConfig
+    ) => {
       const method = url.split("]")[0].replace("[", "");
       const shortUrl = url.split("]").slice(1).join("]");
-      return createClientMethod({
+      return createClientQuery({
         url: shortUrl,
         method,
         instance,
@@ -42,12 +46,33 @@ export const createClient = <
         config,
       });
     },
-  } as unknown as {
-    route: <URL extends keyof Definitions, R = Definitions[URL]>(
+    url: <URL extends keyof Definitions>(
+      url: string,
+      args: Args<Definitions[URL]["schema"]>,
+      config: AxiosRequestConfig
+    ) => {
+      const method = url.split("]")[0].replace("[", "");
+      const shortUrl = url.split("]").slice(1).join("]");
+      return createRouteUri({
+        url: shortUrl,
+        method,
+        instance,
+        args,
+        config,
+      });
+    },
+    infer: undefined as unknown,
+  } as {
+    url: <URL extends keyof Definitions, R = Definitions[URL]>(
       url: URL,
       args: R extends RouteDefinition ? Args<R["schema"]> : never,
       config?: AxiosRequestConfig
-    ) => R extends RouteDefinition ? RouteClient<R> : never;
+    ) => string;
+    query: <URL extends keyof Definitions, R = Definitions[URL]>(
+      url: URL,
+      args: R extends RouteDefinition ? Args<R["schema"]> : never,
+      config?: AxiosRequestConfig
+    ) => R extends RouteDefinition ? Promise<OkResponse<R>> : never;
     infer: { [URL in keyof Definitions]: OkResponse<Definitions[URL]> };
   };
 };
