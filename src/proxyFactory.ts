@@ -31,37 +31,31 @@ export const createClient = <
   instance: AxiosInstance;
 }) => {
   return {
-    url: <URL extends keyof Definitions & string, R = Definitions[URL]>(
-      url: URL,
-      args: R extends RouteDefinition
-        ? Args<DrainOuterGeneric<R["schema"]>>
-        : never,
-      config?: AxiosRequestConfig
-    ) => {
-      const method = url.split("]")[0].replace("[", "");
-      const shortUrl = url.split("]").slice(1).join("]");
-      return createRouteUri<Definitions[URL]>({
-        url: shortUrl,
-        method,
-        instance,
-        args,
-        config,
-      });
-    },
-    query: <URL extends keyof Definitions & string>(
+    route: <URL extends keyof Definitions & string>(
       url: URL,
       args: Args<DrainOuterGeneric<Definitions[URL]["schema"]>>,
       config?: AxiosRequestConfig
     ) => {
       const method = url.split("]")[0].replace("[", "");
       const shortUrl = url.split("]").slice(1).join("]");
-      return query<Definitions[URL]>({
-        url: shortUrl,
-        method,
-        instance,
-        args,
-        config,
-      });
+      return {
+        url: createRouteUri<Definitions[URL]>({
+          url: shortUrl,
+          method,
+          instance,
+          args,
+          config,
+        }),
+        query: () => {
+          return query<Definitions[URL]>({
+            url: shortUrl,
+            method,
+            instance,
+            args,
+            config,
+          });
+        },
+      };
     },
     infer: undefined as unknown as {
       [URL in keyof Definitions]: OkResponse<Definitions[URL]>;

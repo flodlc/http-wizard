@@ -25,7 +25,9 @@ export const apiClient = createClient<Router>(axios.instance());
 import type { Router } from "server";
 import { apiClient } from "./apiClient";
 
-const user = await apiClient.query("[GET]/user/:id", { params: { id: "1" } });
+const user = await apiClient
+  .route("[GET]/user/:id", { params: { id: "1" } })
+  .query();
 
 // user is safe: { id:string, name:string }
 ```

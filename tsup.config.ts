@@ -1,9 +1,9 @@
-import { defineConfig } from 'tsup';
+import { defineConfig } from "tsup";
 
 export default defineConfig({
-  target: 'es2015',
-  platform: 'node',
-  format: ['cjs', 'esm'],
+  target: "es2015",
+  platform: "browser",
+  format: ["cjs", "esm"],
   splitting: false,
   shims: false,
   minify: false,
