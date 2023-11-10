@@ -26,8 +26,8 @@ import type { Router } from "server";
 import { apiClient } from "./apiClient";
 
 const user = await apiClient
-  .route("[GET]/user/:id", { params: { id: "1" } })
-  .query();
+  .ref("[GET]/user/:id")
+  .query({ params: { id: "1" } });
 
 // user is safe: { id:string, name:string }
 ```
