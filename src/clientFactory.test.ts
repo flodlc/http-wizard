@@ -68,13 +68,19 @@ describe("Check requests parameters and response", () => {
     } as any);
 
     const user = await client
-      .route("[GET]/user/:id", {
-        params: { id: "toto" },
-      })
+      .route("[GET]/user/:id", { params: { id: "toto" } })
       .query();
+
+    const user = await client
+      .ref("[GET]/user/:id")
+      .query({ params: { id: "toto" } });
 
     const url = await client.route("[GET]/user/:id", { params: { id: "toto" } })
       .url;
+
+    const urld = await client
+      .ref("[GET]/user/:id")
+      .url({ params: { id: "toto" } });
 
     expect(request.mock.calls?.[0]?.[0]).toMatchObject({
       url: "/user/toto",

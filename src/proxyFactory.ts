@@ -57,8 +57,40 @@ export const createClient = <
         },
       };
     },
+    ref: <URL extends keyof Definitions & string>(url: URL) => {
+      const method = url.split("]")[0].replace("[", "");
+      const shortUrl = url.split("]").slice(1).join("]");
+      return {
+        url: (
+          args: Args<DrainOuterGeneric<Definitions[URL]["schema"]>>,
+          config?: AxiosRequestConfig
+        ) =>
+          createRouteUri<Definitions[URL]>({
+            url: shortUrl,
+            method,
+            instance,
+            args,
+            config,
+          }),
+        query: (
+          args: Args<DrainOuterGeneric<Definitions[URL]["schema"]>>,
+          config?: AxiosRequestConfig
+        ) => {
+          return query<Definitions[URL]>({
+            url: shortUrl,
+            method,
+            instance,
+            args,
+            config,
+          });
+        },
+      };
+    },
     infer: undefined as unknown as {
       [URL in keyof Definitions]: OkResponse<Definitions[URL]>;
+    },
+    inferArgs: undefined as unknown as {
+      [URL in keyof Definitions]: Args<Definitions[URL]["schema"]>;
     },
   };
 };

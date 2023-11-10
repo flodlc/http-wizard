@@ -1,5 +1,4 @@
-import { createClient } from "./proxyFactory";
-import { RouteDefinition } from "./types";
+import { RouteDefinition, createClient, createRoute } from "http-wizard";
 import {
   FetchQueryOptions,
   QueryClient,
