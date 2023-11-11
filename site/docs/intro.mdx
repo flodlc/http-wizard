@@ -42,7 +42,8 @@ First, let's create a route on the server:
 
 ```typescript title="Route creation with Fastify and Zod"
 // server.ts
-import { createRoute, z } from "@http-wizard/core";
+import { createRoute } from "@http-wizard/core";
+import { z } from "zod";
 
 const User = z.object({
   id: z.string(),

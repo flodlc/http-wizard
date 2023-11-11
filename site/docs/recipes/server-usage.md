@@ -12,7 +12,8 @@ basic exemple of route definition:
 
 ```typescript title="basic route definition"
 // server/getUserById.ts
-import { createRoute, z } from "@http-wizard/core";
+import { createRoute } from "@http-wizard/core";
+import { z } from "zod";
 
 const User = z.object({
   id: z.string(),
@@ -71,7 +72,8 @@ The property `okCode` allows inferring the response type from a given response c
 
 ```typescript title="Usage of okCode property"
 // server/getUserById.ts
-import { createRoute, z } from "@http-wizard/core";
+import { createRoute } from "@http-wizard/core";
+import { z } from "zod";
 
 const User = z.object({
   id: z.string(),
