@@ -15,10 +15,13 @@ https://github.com/flodlc/http-wizard/assets/3781663/71c749f0-3493-4865-8a9a-414
 
 ### What it can do:
 
-- Export a type-safe client API
-- Validate input and output of your routes
-- Drastically simplify your codebase and ensure validation best practices
-- Allow HTTP standards-compliant route naming and usage, with or without http-wizard as a client.
+- 100% type-safe api client with typescript magic (no code generation)
+- Fastify first-class support
+- React-query first-class support
+- Zod and Typebox Type providers
+- Delightful end-to-end developer experience (tRPC-like)
+- Http standards / REST compatibility: you are owner of your routes
+- Type inference utils
 
 ---
 
