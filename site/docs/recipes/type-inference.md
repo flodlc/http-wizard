@@ -11,14 +11,14 @@ Let's create a client:
 ```typescript title="Create client"
 // client/apiClient.ts
 import axios from "axios";
-import { createClient } from "http-wizard";
+import { createClient } from "@http-wizard/core";
 
 import type { Router } from "server";
 
 export const apiClient = createClient<Router>(axios.instance());
 ```
 
-Here is how to infer the type from the route key.  
+Here is how to infer the response type from the route key.  
 The infer property is made for this.
 
 ```typescript title="apiClient usage"

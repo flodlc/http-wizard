@@ -9,9 +9,9 @@ sidebar_position: 2
 To get started, install http-wizard using npm or yarn:
 
 ```bash title="command"
-npm install http-wizard zod
+npm install @http-wizard/core zod
 # or
-yarn add http-wizard zod
+yarn add @http-wizard/core zod
 ```
 
 ## How it works ?
@@ -23,7 +23,7 @@ Let's first create a route on the server:
 
 ```typescript title="Route creation with Fastify and Zod"
 // server.ts
-import { createRoute, z } from "http-wizard";
+import { createRoute, z } from "@http-wizard/core";
 
 const User = z.object({
   id: z.string(),
@@ -57,7 +57,7 @@ Now, let's use the Router type on the client:
 
 ```typescript title="Client instancation with axios"
 // client.ts
-import { createClient, ZodTypeProvider } from "http-wizard";
+import { createClient, ZodTypeProvider } from "@http-wizard/core";
 import axios from "axios";
 
 import type { Router } from "./server";

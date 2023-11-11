@@ -13,11 +13,13 @@ Let's instanciate our apiClient !
 ```typescript title="Client instancation with axios"
 // client/apiClient.ts
 import axios from "axios";
-import { createClient, ZodTypeProvider } from "http-wizard";
+import { createClient, ZodTypeProvider } from "@http-wizard/core";
 
 import type { Router } from "server";
 
-export const apiClient = createClient<Router, ZodTypeProvider>(axios.instance());
+export const apiClient = createClient<Router, ZodTypeProvider>(
+  axios.instance()
+);
 ```
 
 ```typescript title="apiClient usage"

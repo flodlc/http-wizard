@@ -27,7 +27,7 @@ Typically, each xxx.route.ts file will look something like this:
 
 ```typescript title="Route creation"
 // src/usecases/getUserById/getUserById.route.ts
-import { createRoute, z } from "http-wizard";
+import { createRoute, z } from "@http-wizard/core";
 
 const User = z.object({
   id: z.string(),
