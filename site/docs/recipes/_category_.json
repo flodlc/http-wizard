@@ -1,6 +1,7 @@
 {
   "label": "Recipes",
   "position": 3,
+  "collapsed": false,
   "link": {
     "type": "generated-index",
     "description": "A list of guides or recipes explaning how to use various features of the library."
