@@ -57,12 +57,12 @@ Now, let's use the Router type on the client:
 
 ```typescript title="Client instancation with axios"
 // client.ts
-import { createClient } from "http-wizard";
+import { createClient, ZodTypeProvider } from "http-wizard";
 import axios from "axios";
 
 import type { Router } from "./server";
 
-const apiClient = createClient<Router>(axios.instance());
+const apiClient = createClient<Router, ZodTypeProvider>(axios.instance());
 const users = await apiClient.ref("[GET]/users").query({});
 // users array is safe: { id:string, name:string }[]
 ```
