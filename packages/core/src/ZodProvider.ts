@@ -9,6 +9,6 @@ export type SchemaZod = {
   response: Record<number, z.Schema>;
 };
 
-export interface ZodTypeAdapter extends TypeProvider {
+export interface ZodTypeProvider extends TypeProvider {
   output: this["input"] extends ZodType ? z.infer<this["input"]> : never;
 }

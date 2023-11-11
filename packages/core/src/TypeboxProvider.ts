@@ -1,5 +1,4 @@
 import { Static, TSchema } from "@sinclair/typebox";
-import { Schema } from "./types";
 import { TypeProvider } from "./Provider";
 
 export type SchemaTypeBox = {

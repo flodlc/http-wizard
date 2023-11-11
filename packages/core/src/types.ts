@@ -1,6 +1,6 @@
 import { AxiosRequestConfig } from "axios";
-import { SchemaTypeBox } from "./TypeboxAdapter";
-import { SchemaZod } from "./ZodAdapter";
+import { SchemaTypeBox } from "./TypeboxProvider";
+import { SchemaZod } from "./ZodProvider";
 
 export type Schema = SchemaTypeBox | SchemaZod;
 

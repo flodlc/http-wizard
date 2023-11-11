@@ -1,6 +1,6 @@
 import { Type } from "@sinclair/typebox";
 import { createClient, createRoute } from "./proxyFactory";
-import { TypeBoxTypeProvider } from "./TypeboxAdapter";
+import { TypeBoxTypeProvider } from "./TypeboxProvider";
 
 const getEasy = createRoute("/easy", {
   method: "GET",
