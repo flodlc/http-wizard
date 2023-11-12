@@ -1,5 +1,5 @@
 <h1 align="center">http-wizard</h1>
-<p align="center"><a href="https://git.io/typing-svg"><img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=18&duration=2000&pause=2000&center=true&width=540&height=80&lines=First+class+api+client+for+node+servers." alt="Typing SVG" /></a></p>
+<p align="center"><a href="https://git.io/typing-svg"><img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=18&duration=2000&pause=2000&center=true&width=550&height=80&lines=Delightful end-to-end experience with Typescript ✨" alt="Typing SVG" /></a></p>
 
 ### Full documentation website:
 
