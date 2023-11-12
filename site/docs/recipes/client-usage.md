@@ -6,9 +6,9 @@ sidebar_position: 2
 
 ### <i>✨ Client side is where http-wizard starts to shine ✨</i>
 
-On the client side, we need the exported `Router` type from the server and having http-wizard installed.
+On the client side, we need the exported `Router` type from the server and http-wizard installed.
 
-Let's instanciate our apiClient !
+Let's instantiate our apiClient!
 
 ```typescript title="Client instancation with axios"
 // client/apiClient.ts
@@ -34,4 +34,4 @@ const user = await apiClient
 // user is safe: { id:string, name:string }
 ```
 
-Enjoy !
+Enjoy!

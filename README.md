@@ -9,7 +9,7 @@
 
 Http-wizard weaves TypeScript magic, offering a type-safe API client and ensuring a delightful end-to-end developer experience. ✨
 
-#### Here is an exemple of usage
+#### Here is an example of usage
 
 https://github.com/flodlc/http-wizard/assets/3781663/e88fc3f8-4174-4ce0-b0f7-30ab127b4bea
 
@@ -45,7 +45,7 @@ yarn add @http-wizard/core
 ## Usage
 
 Currently http-wizard uses Zod or Typebox for validation.
-Here is an exemple with Zod.
+Here is an example with Zod.
 
 Let's first create a route on the server:
 
@@ -96,4 +96,4 @@ const users = await apiClient.ref("[GET]/users").query({});
 // users array is safe: { id:string, name:string }[]
 ```
 
-Easy right ?
+Easy, right?

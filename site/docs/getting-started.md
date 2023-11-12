@@ -14,10 +14,10 @@ npm install @http-wizard/core zod axios
 yarn add @http-wizard/core zod axios
 ```
 
-## How it works ?
+## How it works
 
 Currently http-wizard uses Zod or Typebox for validation.
-Here is an exemple with Zod.
+Here is an example with Zod.
 
 Let's first create a route on the server:
 
@@ -68,4 +68,4 @@ const users = await apiClient.ref("[GET]/users").query({});
 // users array is safe: { id:string, name:string }[]
 ```
 
-Easy right ?
+Easy, right?
