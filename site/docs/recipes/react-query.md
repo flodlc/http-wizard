@@ -9,9 +9,9 @@ sidebar_position: 3
 To get started, install http-wizard using npm or yarn:
 
 ```bash title="install @http-wizard/react-query"
-npm install @http-wizard/core @http-wizard/react-query
+npm install @http-wizard/core @http-wizard/react-query zod axios
 # or
-yarn add @http-wizard/core @http-wizard/react-query
+yarn add @http-wizard/core @http-wizard/react-query zod axios
 ```
 
 `@http-wizard/react-query` provides a wrapper of http-wizard with additional react-query functions.

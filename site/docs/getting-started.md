@@ -9,9 +9,9 @@ sidebar_position: 2
 To get started, install http-wizard using npm or yarn:
 
 ```bash title="command"
-npm install @http-wizard/core zod
+npm install @http-wizard/core zod axios
 # or
-yarn add @http-wizard/core zod
+yarn add @http-wizard/core zod axios
 ```
 
 ## How it works ?
