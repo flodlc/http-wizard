@@ -37,9 +37,9 @@ Table of Contents:
 To get started, install http-wizard using npm or yarn:
 
 ```sh
-npm install @http-wizard/core
+npm install @http-wizard/core zod axios
 # or
-yarn add @http-wizard/core
+yarn add @http-wizard/core zod axios
 ```
 
 ## Usage
