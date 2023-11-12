@@ -6,7 +6,7 @@ import {
   RouteDefinition,
   TypeProvider,
   createClient,
-} from "http-wizard";
+} from "@http-wizard/core";
 import {
   FetchQueryOptions,
   QueryClient,
@@ -21,11 +21,11 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { AxiosRequestConfig } from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 
 export const createQueryClient = <
   Definitions extends Record<string, RouteDefinition>,
-  TP extends TypeProvider
+  TP extends TypeProvider,
 >({
   queryClient: optionQueryClient,
   ...options
@@ -149,3 +149,5 @@ export const createQueryClient = <
     },
   };
 };
+
+createQueryClient({ instance: axios.create() });
