@@ -68,7 +68,7 @@ const MyComponent = () => {
 };
 ```
 
-React query functions takes many options.  
+React query functions take many options.  
 [Full React-query doc is available here](https://tanstack.com/query/latest/docs/react/overview).
 
-Enjoy !
+Enjoy!

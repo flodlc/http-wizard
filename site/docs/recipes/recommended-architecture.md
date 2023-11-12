@@ -69,4 +69,4 @@ export const registerRoutes = (instance: FastifyInstance) => ({
 export type Router = ReturnType<typeof registerRoutes>;
 ```
 
-Don't forget to export the Router type from your backend package, it will be used for creating a typesafe client in you front packages !
+Don't forget to export the Router type from your backend package, it will be used for creating a typesafe client in your front packages!
