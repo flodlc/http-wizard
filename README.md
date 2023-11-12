@@ -11,7 +11,7 @@ Http-wizard weaves TypeScript magic, offering a type-safe API client and ensurin
 
 #### Here is an exemple of usage
 
-https://github.com/flodlc/http-wizard/assets/3781663/71c749f0-3493-4865-8a9a-41421a371a05
+https://github.com/flodlc/http-wizard/assets/3781663/e88fc3f8-4174-4ce0-b0f7-30ab127b4bea
 
 ### What it can do:
 
