@@ -5,10 +5,9 @@ sidebar_position: 1
 # Usage on the server
 
 Http-wizard is made for Fastify but can be used with all node servers through custom adapters.  
-On the server, http-wizard is mainly used to link the route validation schemas with the exported `Router` type.  
-`Router` type is what allows the typesafety on the client side.
+On the server, http-wizard is mainly used to link the route validation schemas with the exported `Router` type.
 
-basic example of route definition:
+### Basic example of route definition
 
 ```typescript title="basic route definition"
 // server/getUserById.ts
@@ -49,19 +48,31 @@ In this case, validation is managed by fastify.
 
 As you can see, we export the returned object from createRoute. It's very important and will be used to export the Router type from the server.
 
-Let's create and export the Router type!
+### Fastify instanciation and Router export
+
+Let's create the fastify server with zod validation and export the Router type!
 
 ```typescript title="Router type export"
 //server/index.ts
-
+import fastify from "fastify";
+import {
+  serializerCompiler,
+  validatorCompiler,
+  ZodTypeProvider,
+} from "fastify-type-provider-zod";
 import { getUserById } from "./getUserById.ts";
 
-const router = { ...getUserByIdRoute() };
+export const server = fastify().withTypeProvider<ZodTypeProvider>();
+server.setValidatorCompiler(validatorCompiler);
+server.setSerializerCompiler(serializerCompiler);
+export type Server = typeof server;
+
+const router = { ...getUserByIdRoute(server) };
 export type Router = typeof router;
 ```
 
-Router type is the type of all the server routes.
-Depends on your architecture you will import it from your client or export it through a package.
+The Router type is necessary on the client side for the instantiation of http-wizard.
+In a monorepo architecture, you import it as an internal package from the client.
 
 You're all set to use http-wizard on the [client side](/recipes/client-usage)!
 

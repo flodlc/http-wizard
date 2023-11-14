@@ -50,59 +50,9 @@ productive development process.
 
 ### How it works
 
-Currently, http-wizard utilizes Zod or Typebox for validation.
-Here is an example with Zod.
+Currently, http-wizard uses Zod or Typebox for validation, axios for data fetching.
+Using Fastify for a new project is highly recommended for the best developer experience.
 
-First, let's create a route on the server:
-
-```typescript title="Route creation with Fastify and Zod"
-// server.ts
-import { createRoute } from "@http-wizard/core";
-import { z } from "zod";
-
-const User = z.object({
-  id: z.string(),
-  name: z.string(),
-});
-
-export const getUsersRoute = (fastify: FastifyInstance) => {
-  return createRoute("/users", {
-    method: "GET",
-    schema: {
-      response: {
-        200: z.array(User),
-      },
-    },
-  }).handle((props) => {
-    fastify.route({
-      ...props,
-      handler: (request) => {
-        const users = await db.getUsers();
-        return users;
-      },
-    });
-  });
-};
-
-const router = { ...getUsersRoute() };
-export type Router = typeof router;
-```
-
-Now, let's use the Router type on the client:
-
-```typescript title="Client instanciation with axios"
-// client.ts
-import { createClient, ZodTypeProvider } from "@http-wizard/core";
-import axios from "axios";
-
-import type { Router } from "./server";
-
-const apiClient = createClient<Router, ZodTypeProvider>(axios.instance());
-const users = await apiClient.ref("[GET]/users").query({});
-// users array is safe: { id:string, name:string }[]
-```
-
-Easy, right?
 Here's how to integrate it into your project:
 [getting-started](/getting-started)
 
