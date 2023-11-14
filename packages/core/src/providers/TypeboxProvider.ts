@@ -1,5 +1,6 @@
-import { Static, TSchema } from "@sinclair/typebox";
-import { TypeProvider } from "./Provider";
+import { Static, TSchema } from '@sinclair/typebox';
+
+import { TypeProvider } from './Provider';
 
 export type SchemaTypeBox = {
   params?: TSchema;
@@ -9,5 +10,5 @@ export type SchemaTypeBox = {
 };
 
 export interface TypeBoxTypeProvider extends TypeProvider {
-  output: this["input"] extends TSchema ? Static<this["input"]> : never;
+  output: this['input'] extends TSchema ? Static<this['input']> : never;
 }

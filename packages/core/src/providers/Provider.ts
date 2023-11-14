@@ -5,4 +5,4 @@ export interface TypeProvider {
 
 export type CallTypeProvider<I, F extends TypeProvider> = (F & {
   input: I;
-})["output"];
+})['output'];

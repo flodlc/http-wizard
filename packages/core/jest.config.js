@@ -1,8 +1,8 @@
 /** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 module.exports = {
   transform: {
-    "^.+\\.tsx?$": "esbuild-jest",
+    '^.+\\.tsx?$': 'esbuild-jest',
   },
-  collectCoverageFrom: ["src/**/*.{ts,tsx}"],
-  testEnvironment: "node",
+  collectCoverageFrom: ['src/**/*.{ts,tsx}'],
+  testEnvironment: 'node',
 };

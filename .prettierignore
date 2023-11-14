@@ -1,0 +1,11 @@
+dist
+.yarn
+node_modules
+.next
+
+styled-system
+styled-system/**
+styled-system/**/*
+routeTree.gen.ts
+build
+.docusaurus

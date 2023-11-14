@@ -1,0 +1,15 @@
+name: CI
+
+on: [pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Run yarn install
+        run: yarn install
+
+      - name: Run prettier and eslint
+        run: yarn lint

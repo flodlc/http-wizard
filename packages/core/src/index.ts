@@ -1,7 +1,8 @@
-export type { TypeProvider } from "./Provider";
-export type { TypeBoxTypeProvider } from "./TypeboxProvider";
-export type { ZodTypeProvider } from "./ZodProvider";
-export type { RouteDefinition } from "./types";
-export type { OkResponse, Args } from "./clientFactory";
-export { createClient, createRoute } from "./proxyFactory";
-export type { Client, Ref } from "./proxyFactory";
+export type { TypeProvider } from './providers/Provider';
+export type { TypeBoxTypeProvider } from './providers/TypeboxProvider';
+export type { ZodTypeProvider } from './providers/ZodProvider';
+export type { RouteDefinition } from './RouteDefinition';
+export type { OkResponse, Args } from './types';
+export { createClient } from './client/client';
+export { createRoute } from './server/server';
+export type { Client, Ref } from './client/client';

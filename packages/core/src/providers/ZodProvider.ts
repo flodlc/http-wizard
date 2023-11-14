@@ -1,5 +1,6 @@
-import { ZodType, z } from "zod";
-import { TypeProvider } from "./Provider";
+import { z, ZodType } from 'zod';
+
+import { TypeProvider } from './Provider';
 
 ``;
 export type SchemaZod = {
@@ -10,5 +11,5 @@ export type SchemaZod = {
 };
 
 export interface ZodTypeProvider extends TypeProvider {
-  output: this["input"] extends ZodType ? z.infer<this["input"]> : never;
+  output: this['input'] extends ZodType ? z.infer<this['input']> : never;
 }

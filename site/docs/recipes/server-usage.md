@@ -11,8 +11,8 @@ On the server, http-wizard is mainly used to link the route validation schemas w
 
 ```typescript title="basic route definition"
 // server/getUserById.ts
-import { createRoute } from "@http-wizard/core";
-import { z } from "zod";
+import { createRoute } from '@http-wizard/core';
+import { z } from 'zod';
 
 const User = z.object({
   id: z.string(),
@@ -20,7 +20,7 @@ const User = z.object({
 });
 
 export const getUserByIdRoute = (fastify: FastifyInstance) => {
-  return createRoute("get/user/:id", {
+  return createRoute('get/user/:id', {
     schema: {
       params: z.object({
         id: z.string(),
@@ -54,13 +54,13 @@ Let's create the fastify server with zod validation and export the Router type!
 
 ```typescript title="Router type export"
 //server/index.ts
-import fastify from "fastify";
+import fastify from 'fastify';
 import {
   serializerCompiler,
   validatorCompiler,
   ZodTypeProvider,
-} from "fastify-type-provider-zod";
-import { getUserById } from "./getUserById.ts";
+} from 'fastify-type-provider-zod';
+import { getUserById } from './getUserById.ts';
 
 export const server = fastify().withTypeProvider<ZodTypeProvider>();
 server.setValidatorCompiler(validatorCompiler);
@@ -83,8 +83,8 @@ The property `okCode` allows inferring the response type from a given response c
 
 ```typescript title="Usage of okCode property"
 // server/getUserById.ts
-import { createRoute } from "@http-wizard/core";
-import { z } from "zod";
+import { createRoute } from '@http-wizard/core';
+import { z } from 'zod';
 
 const User = z.object({
   id: z.string(),
@@ -92,8 +92,8 @@ const User = z.object({
 });
 
 export const getUserByIdRoute = (fastify: FastifyInstance) => {
-  return createRoute("/user/:id", {
-    method: "GET",
+  return createRoute('/user/:id', {
+    method: 'GET',
     okCode: 201,
     schema: {
       response: {
