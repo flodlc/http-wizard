@@ -1,0 +1,37 @@
+{
+  "editor.formatOnSave": true,
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "files.insertFinalNewline": true,
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/*/lib": true,
+    "**/*/build": true,
+    "**/.webpack": true
+  },
+  "files.watcherExclude": {
+    "**/*/lib": true,
+    "**/*/dist": true,
+    "**/*/build": true,
+    "**/.webpack": true,
+    "**/node_modules": false
+  },
+  "search.exclude": {
+    "**/*/lib": true,
+    "**/*/dist": true,
+    "**/*/build": true,
+    "**/.webpack": true,
+    "**/.next": true,
+    "**/node_modules": true
+  },
+  "javascript.preferences.importModuleSpecifier": "relative",
+  "typescript.preferences.importModuleSpecifier": "relative"
+}

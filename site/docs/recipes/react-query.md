@@ -29,10 +29,10 @@ Let's instantiate our apiClient with @http-wizard/react-query. Instead of create
 
 ```typescript title="Client instanciation with axios"
 // client/apiClient.ts
-import axios from "axios";
-import { createQueryClient, ZodTypeProvider } from "@http-wizard/react-query";
+import axios from 'axios';
+import { createQueryClient, ZodTypeProvider } from '@http-wizard/react-query';
 
-import type { Router } from "server";
+import type { Router } from 'server';
 
 export const apiClient = createQueryClient<Router, ZodTypeProvider>(
   axios.instance()
@@ -41,14 +41,14 @@ export const apiClient = createQueryClient<Router, ZodTypeProvider>(
 
 ```tsx title="apiClient usage with useQuery"
 // client/my-page.ts
-import type { Router } from "server";
-import { apiClient } from "./apiClient";
+import type { Router } from 'server';
+import { apiClient } from './apiClient';
 
 const MyComponent = () => {
   // user is safe: { id:string, name:string }
   const { data: user } = apiClient
-    .ref("[GET]/user/:id")
-    .useQuery({ params: { id: "1" } });
+    .ref('[GET]/user/:id')
+    .useQuery({ params: { id: '1' } });
 
   if (isLoading) return <div>loading...</div>;
   return <div>{user.name}</div>;
@@ -57,13 +57,13 @@ const MyComponent = () => {
 
 ```tsx title="apiClient usage with useMutation"
 // client/my-page.ts
-import type { Router } from "server";
-import { apiClient } from "./apiClient";
+import type { Router } from 'server';
+import { apiClient } from './apiClient';
 
 const MyComponent = () => {
-  const { mutate } = apiClient.ref("[POST]/user").useMutation();
+  const { mutate } = apiClient.ref('[POST]/user').useMutation();
   return (
-    <button onClick={() => mutate({ body: { name: "John" } })}>
+    <button onClick={() => mutate({ body: { name: 'John' } })}>
       Create a user
     </button>
   );

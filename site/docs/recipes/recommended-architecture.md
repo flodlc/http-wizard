@@ -27,8 +27,8 @@ Typically, each xxx.route.ts file will look something like this:
 
 ```typescript title="Route creation"
 // src/usecases/getUserById/getUserById.route.ts
-import { createRoute } from "@http-wizard/core";
-import { z } from "zod";
+import { createRoute } from '@http-wizard/core';
+import { z } from 'zod';
 
 const User = z.object({
   id: z.string(),
@@ -36,8 +36,8 @@ const User = z.object({
 });
 
 export const getUserByIdRoute = (fastify: FastifyInstance) => {
-  return createRoute("/user/:id", {
-    method: "GET",
+  return createRoute('/user/:id', {
+    method: 'GET',
     schema: {
       response: {
         200: User,
@@ -58,8 +58,8 @@ Then, create your Router type:
 ```typescript title="Export Router type"
 // index.ts
 
-import { getUserByIdRoute } from "src/usecases/getUserById/getUserById.route.ts";
-import { createUserRoute } from "src/usecases/createUser/createUser.route.ts";
+import { getUserByIdRoute } from 'src/usecases/getUserById/getUserById.route.ts';
+import { createUserRoute } from 'src/usecases/createUser/createUser.route.ts';
 
 export const registerRoutes = (instance: FastifyInstance) => ({
   ...getUserByIdRoute(instance),

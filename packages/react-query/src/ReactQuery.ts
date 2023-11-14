@@ -1,27 +1,27 @@
 import {
   Args,
   Client,
+  createClient,
   OkResponse,
   Ref,
   RouteDefinition,
   TypeProvider,
-  createClient,
-} from "@http-wizard/core";
+} from '@http-wizard/core';
 import {
   FetchQueryOptions,
   QueryClient,
+  useInfiniteQuery,
   UseInfiniteQueryOptions,
   UseInfiniteQueryResult,
+  useMutation,
   UseMutationOptions,
   UseMutationResult,
-  UseQueryOptions,
-  UseQueryResult,
-  useInfiniteQuery,
-  useMutation,
   useQuery,
   useQueryClient,
-} from "@tanstack/react-query";
-import axios, { AxiosRequestConfig } from "axios";
+  UseQueryOptions,
+  UseQueryResult,
+} from '@tanstack/react-query';
+import axios, { AxiosRequestConfig } from 'axios';
 
 export const createQueryClient = <
   Definitions extends Record<string, RouteDefinition>,
@@ -31,23 +31,23 @@ export const createQueryClient = <
   ...options
 }: Parameters<typeof createClient>[0] & {
   queryClient?: QueryClient;
-}): Omit<Client<Definitions, TP>, "ref"> & {
+}): Omit<Client<Definitions, TP>, 'ref'> & {
   ref: <URL extends keyof Definitions & string>(
     url: URL
   ) => Ref<Definitions, URL, TP> & {
     useQuery: (
-      args: Args<Definitions[URL]["schema"], TP>,
+      args: Args<Definitions[URL]['schema'], TP>,
       options?: Omit<
         UseQueryOptions<OkResponse<Definitions[URL], TP>>,
-        "queryKey" | "queryFn"
+        'queryKey' | 'queryFn'
       >,
       config?: AxiosRequestConfig
     ) => UseQueryResult<OkResponse<Definitions[URL], TP>>;
     useInfiniteQuery: (
-      args: Args<Definitions[URL]["schema"], TP>,
+      args: Args<Definitions[URL]['schema'], TP>,
       options: Omit<
         UseInfiniteQueryOptions<OkResponse<Definitions[URL], TP>>,
-        "queryKey" | "queryFn"
+        'queryKey' | 'queryFn'
       >,
       config?: AxiosRequestConfig
     ) => UseInfiniteQueryResult<OkResponse<Definitions[URL], TP>>;
@@ -55,21 +55,21 @@ export const createQueryClient = <
       options?: UseMutationOptions<
         OkResponse<Definitions[URL], TP>,
         Error,
-        Args<Definitions[URL]["schema"], TP>
+        Args<Definitions[URL]['schema'], TP>
       >,
-      config?: Parameters<Ref<Definitions, URL, TP>["query"]>[1]
+      config?: Parameters<Ref<Definitions, URL, TP>['query']>[1]
     ) => UseMutationResult<
       OkResponse<Definitions[URL], TP>,
       Error,
-      Args<Definitions[URL]["schema"], TP>
+      Args<Definitions[URL]['schema'], TP>
     >;
     prefetchQuery: (
-      args: Args<Definitions[URL]["schema"], TP>,
+      args: Args<Definitions[URL]['schema'], TP>,
       options?: Omit<
         FetchQueryOptions<OkResponse<Definitions[URL], TP>>,
-        "queryKey" | "queryFn"
+        'queryKey' | 'queryFn'
       >,
-      config?: Parameters<Ref<Definitions, URL, TP>["query"]>[1]
+      config?: Parameters<Ref<Definitions, URL, TP>['query']>[1]
     ) => Promise<void>;
   };
 } => {
@@ -82,12 +82,12 @@ export const createQueryClient = <
       const routeRef = client.ref<URL>(url);
       return {
         useQuery: (
-          args: Args<Definitions[URL]["schema"], TP>,
+          args: Args<Definitions[URL]['schema'], TP>,
           options?: Omit<
             UseQueryOptions<OkResponse<Definitions[URL], TP>>,
-            "queryKey" | "queryFn"
+            'queryKey' | 'queryFn'
           >,
-          config?: Parameters<Ref<Definitions, URL, TP>["query"]>[1]
+          config?: Parameters<Ref<Definitions, URL, TP>['query']>[1]
         ) =>
           useQuery(
             {
@@ -98,12 +98,12 @@ export const createQueryClient = <
             optionQueryClient
           ),
         useInfiniteQuery: (
-          args: Args<Definitions[URL]["schema"], TP>,
+          args: Args<Definitions[URL]['schema'], TP>,
           options: Omit<
             UseInfiniteQueryOptions<OkResponse<Definitions[URL], TP>>,
-            "queryKey" | "queryFn"
+            'queryKey' | 'queryFn'
           >,
-          config?: Parameters<Ref<Definitions, URL, TP>["query"]>[1]
+          config?: Parameters<Ref<Definitions, URL, TP>['query']>[1]
         ) =>
           useInfiniteQuery(
             {
@@ -117,9 +117,9 @@ export const createQueryClient = <
           options?: UseMutationOptions<
             OkResponse<Definitions[URL], TP>,
             Error,
-            Args<Definitions[URL]["schema"], TP>
+            Args<Definitions[URL]['schema'], TP>
           >,
-          config?: Parameters<Ref<Definitions, URL, TP>["query"]>[1]
+          config?: Parameters<Ref<Definitions, URL, TP>['query']>[1]
         ) =>
           useMutation(
             {
@@ -130,12 +130,12 @@ export const createQueryClient = <
             optionQueryClient
           ),
         prefetchQuery: (
-          args: Args<Definitions[URL]["schema"], TP>,
+          args: Args<Definitions[URL]['schema'], TP>,
           options?: Omit<
             FetchQueryOptions<OkResponse<Definitions[URL], TP>>,
-            "queryKey" | "queryFn"
+            'queryKey' | 'queryFn'
           >,
-          config?: Parameters<Ref<Definitions, URL, TP>["query"]>[1]
+          config?: Parameters<Ref<Definitions, URL, TP>['query']>[1]
         ) => {
           const queryClient = optionQueryClient ?? useQueryClient();
           return queryClient.prefetchQuery({

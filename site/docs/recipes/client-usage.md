@@ -12,10 +12,10 @@ Let's instantiate our apiClient!
 
 ```typescript title="Client instancation with axios"
 // client/apiClient.ts
-import axios from "axios";
-import { createClient, ZodTypeProvider } from "@http-wizard/core";
+import axios from 'axios';
+import { createClient, ZodTypeProvider } from '@http-wizard/core';
 
-import type { Router } from "server";
+import type { Router } from 'server';
 
 export const apiClient = createClient<Router, ZodTypeProvider>(
   axios.instance()
@@ -24,12 +24,12 @@ export const apiClient = createClient<Router, ZodTypeProvider>(
 
 ```typescript title="apiClient usage"
 // client/my-page.ts
-import type { Router } from "server";
-import { apiClient } from "./apiClient";
+import type { Router } from 'server';
+import { apiClient } from './apiClient';
 
 const user = await apiClient
-  .ref("[GET]/user/:id")
-  .query({ params: { id: "1" } });
+  .ref('[GET]/user/:id')
+  .query({ params: { id: '1' } });
 
 // user is safe: { id:string, name:string }
 ```

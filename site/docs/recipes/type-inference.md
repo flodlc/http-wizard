@@ -14,10 +14,10 @@ The infer property is made for this.
 
 ```typescript title="Response type inference"
 // client/my-page.ts
-import type { Router } from "server";
-import { apiClient } from "./apiClient";
+import type { Router } from 'server';
+import { apiClient } from './apiClient';
 
-type User = (typeof apiClient.infer)["[GET]/user/:id"];
+type User = (typeof apiClient.infer)['[GET]/user/:id'];
 // { id: string, name: string }
 ```
 
@@ -27,9 +27,9 @@ The infer property is made for this.
 
 ```typescript title="Args type inference"
 // client/my-page.ts
-import type { Router } from "server";
-import { apiClient } from "./apiClient";
+import type { Router } from 'server';
+import { apiClient } from './apiClient';
 
-type User = (typeof apiClient.inferArgs)["[GET]/user/:id"];
+type User = (typeof apiClient.inferArgs)['[GET]/user/:id'];
 // { query: { id: string } }
 ```
