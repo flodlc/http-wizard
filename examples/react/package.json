@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "license": "MIT",
   "private": true,
+  "scripts": {
+    "start": "echo 11 && (yarn workspace server dev & yarn workspace client dev)"
+  },
   "workspaces": [
     "client",
     "server"
