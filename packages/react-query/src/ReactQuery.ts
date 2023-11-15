@@ -10,6 +10,7 @@ import {
 import {
   FetchQueryOptions,
   QueryClient,
+  QueryKey,
   useInfiniteQuery,
   UseInfiniteQueryOptions,
   UseInfiniteQueryResult,
@@ -23,22 +24,22 @@ import {
 } from '@tanstack/react-query';
 import axios, { AxiosRequestConfig } from 'axios';
 
-export const createQueryClient = <
+export type ClientWithReactQuery<
   Definitions extends Record<string, RouteDefinition>,
   TP extends TypeProvider,
->({
-  queryClient: optionQueryClient,
-  ...options
-}: Parameters<typeof createClient>[0] & {
-  queryClient?: QueryClient;
-}): Omit<Client<Definitions, TP>, 'ref'> & {
+> = Omit<Client<Definitions, TP>, 'ref'> & {
   ref: <URL extends keyof Definitions & string>(
     url: URL
   ) => Ref<Definitions, URL, TP> & {
     useQuery: (
       args: Args<Definitions[URL]['schema'], TP>,
       options?: Omit<
-        UseQueryOptions<OkResponse<Definitions[URL], TP>>,
+        UseQueryOptions<
+          OkResponse<Definitions[URL], TP>,
+          Error,
+          OkResponse<Definitions[URL], TP>,
+          QueryKey
+        >,
         'queryKey' | 'queryFn'
       >,
       config?: AxiosRequestConfig
@@ -72,7 +73,17 @@ export const createQueryClient = <
       config?: Parameters<Ref<Definitions, URL, TP>['query']>[1]
     ) => Promise<void>;
   };
-} => {
+};
+
+export const createQueryClient = <
+  Definitions extends Record<string, RouteDefinition>,
+  TP extends TypeProvider,
+>({
+  queryClient: optionQueryClient,
+  ...options
+}: Parameters<typeof createClient>[0] & {
+  queryClient?: QueryClient;
+}): ClientWithReactQuery<Definitions, TP> => {
   const client: Client<Definitions, TP> = createClient<Definitions, TP>(
     options
   );
@@ -84,7 +95,12 @@ export const createQueryClient = <
         useQuery: (
           args: Args<Definitions[URL]['schema'], TP>,
           options?: Omit<
-            UseQueryOptions<OkResponse<Definitions[URL], TP>>,
+            UseQueryOptions<
+              OkResponse<Definitions[URL], TP>,
+              Error,
+              OkResponse<Definitions[URL], TP>,
+              QueryKey
+            >,
             'queryKey' | 'queryFn'
           >,
           config?: Parameters<Ref<Definitions, URL, TP>['query']>[1]
