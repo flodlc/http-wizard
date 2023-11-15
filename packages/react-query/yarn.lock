@@ -424,12 +424,10 @@
   resolved "https://registry.yarnpkg.com/@esbuild/win32-x64/-/win32-x64-0.17.19.tgz#8cfaf2ff603e9aabb910e9c0558c26cf32744061"
   integrity sha512-lAhycmKnVOuRYNtRtatQR1LPQf2oYCkRGkSFnseDAKPl8lu5SOsK/e1sXe5a0Pc5kHIHe6P2I/ilntNv2xf3cA==
 
-"@http-wizard/core@1.3.12":
-  version "1.3.12"
-  resolved "https://registry.yarnpkg.com/@http-wizard/core/-/core-1.3.12.tgz#22d995117aa8d4df6a9e5004c2b828b9cb8b3a75"
-  integrity sha512-nd1X22+nfRn39yEXDKiRcpBPrXmvufHNJfY2zGaodiLH8I9m+SgIuQd1qdLlerQgV3wUmUXeV6hPaBpAf8QwIA==
-  dependencies:
-    axios "^1.4.0"
+"@http-wizard/core@1.3.20":
+  version "1.3.20"
+  resolved "https://registry.yarnpkg.com/@http-wizard/core/-/core-1.3.20.tgz#3ce67d19628c5485a19223ff77bcce7a8102b8e4"
+  integrity sha512-nAXyMPsUysgMChXOh40M6Q/LasPjs5KQCWrY7VINrtNkVEIn3PXoNfSrtCb7xcsBhJmqKppnzS2hK7fK816mrA==
 
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
@@ -965,9 +963,9 @@ atob@^2.1.2:
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
 
 axios@^1.4.0:
-  version "1.6.1"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.6.1.tgz#76550d644bf0a2d469a01f9244db6753208397d7"
-  integrity sha512-vfBmhDpKafglh0EldBEbVuoe7DyAavGSLWhuSm5ZSEKQnHhBf0xAAwybbNH1IkrJNGnS/VG4I5yxig1pCEXE4g==
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.6.2.tgz#de67d42c755b571d3e698df1b6504cde9b0ee9f2"
+  integrity sha512-7i24Ri4pmDRfJTR7LDBhsOTtcm+9kjX5WiY1X3wIisx6G9So3pfMkEiU7emUBe46oceVImccTEM3k6C5dbVW8A==
   dependencies:
     follow-redirects "^1.15.0"
     form-data "^4.0.0"
