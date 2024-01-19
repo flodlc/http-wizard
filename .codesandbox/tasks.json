@@ -1,0 +1,21 @@
+{
+  // These tasks will run in order when initializing your CodeSandbox project.
+  "setupTasks": [
+    {
+      "name": "Install Deps",
+      "command": "cd examples/react && yarn --production=false"
+    }
+  ],
+
+  // These tasks can be run from CodeSandbox. Running one will open a log in the app.
+  "tasks": {
+    "cd examples/react && (yarn workspace server dev & yarn workspace client dev)": {
+      "name": "dsfsf examples/react && (yarn workspace server dev & yarn workspace client dev)",
+      "command": "cd examples/react && pwd && (yarn workspace server dev & yarn workspace client dev --port 3000)",
+      "runAtStart": true,
+      "preview": {
+        "port": 3000
+      }
+    }
+  }
+}
