@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 import { RouteDefinition, Schema } from '../RouteDefinition';
 
 const methods = [
@@ -42,10 +44,19 @@ export const createRoute = <
         schema: options.schema,
       });
       const routeDef = { url, ...options };
-      const key = `${options.method}/${url}` as `${D['method']}${URL}`;
+      const key = `[${options.method}]${url}` as `${D['method']}${URL}`;
       return { [key]: routeDef } as {
         [k in `[${D['method']}]${URL}`]: typeof routeDef;
       };
     },
   };
 };
+
+const a = createRoute('/member/:id', {
+  method: 'GET',
+  schema: { response: { 200: z.object({}) } },
+}).handle(({ method, url, schema }) => {
+  // console.log(method, url, schema);
+});
+
+console.log('a', a, a['[GET]/member/:id'].url);
